@@ -1,0 +1,44 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+version: '3.8'
+
+services:
+  libsql:
+    image: ghcr.io/tursodatabase/libsql-server:latest
+    container_name: trusty_libsql
+    hostname: libsql
+    environment:
+      LIBSQLD_HTTP_LISTEN_ADDR: '0.0.0.0:8080'
+    ports:
+      - 5001:5001
+      - 8080:8080
+    volumes:
+      - libsql_data:/var/lib/sqld
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: trusty_mailpit
+    restart: unless-stopped
+    volumes:
+      - mailpit_data:/data
+    ports:
+      - '1025:1025' # SMTP bind port.
+      - '8025:8025' # HTTP bind port for UI.
+
+  redis:
+    image: redis:7-alpine
+    container_name: trusty_redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/data'
+    command: 'redis-server --save 20 1 --loglevel warning --requirepass securedb'
+
+volumes:
+  libsql_data:
+    driver: local
+  redis_data:
+    driver: local
+  mailpit_data:
+    driver: local

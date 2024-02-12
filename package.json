@@ -1,0 +1,71 @@
+{
+    "name": "trusty",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "config": {
+        "image": "ghcr.io/riipandi/trusty"
+    },
+    "scripts": {
+        "build": "wireit",
+        "dev": "tsx watch src/server.ts",
+        "start": "node dist/server.cjs",
+        "db:migrate": "tsx src/migrate.ts",
+        "db:rollback": "tsx src/migrate.ts rollback",
+        "db:seed": "tsx src/migrate.ts seed",
+        "docker:build": "docker build -f Dockerfile . -t $npm_package_config_image:latest -t $npm_package_config_image:$npm_package_version",
+        "docker:run": "docker run --rm -it -p 8030:8030 --env-file .env --name $npm_package_name $npm_package_config_image:latest",
+        "docker:push": "docker push $npm_package_config_image:latest && docker push $npm_package_config_image:$npm_package_version",
+        "generate-key": "openssl rand -base64 500 | tr -dc 'a-zA-Z0-9' | fold -w 40 | head -n 1",
+        "cleanup": "docker compose down --remove-orphans && rimraf build public/build",
+        "purge": "docker compose down --remove-orphans --volumes && rimraf build public/build",
+        "update-deps": "npm-check-updates --configFileName .ncurc.json",
+        "pre-dev": "docker compose up -d",
+        "pre-commit": "sh .husky/pre-commit",
+        "prepare": "husky || true",
+        "check": "biome check --apply .",
+        "format": "biome format . --write",
+        "lint": "biome lint --apply ."
+    },
+    "wireit": {
+        "build": {
+            "command": "rimraf dist && node build.config.mjs",
+            "files": ["src/**/*.{css,ts}", "tsconfig.json"],
+            "output": ["dist/**", "static/**"],
+            "clean": "if-file-deleted",
+            "env": {
+                "NODE_ENV": {
+                    "external": true,
+                    "default": "development"
+                }
+            }
+        }
+    },
+    "dependencies": {
+        "@hono/node-server": "^1.7.0",
+        "@hono/valibot-validator": "^0.2.1",
+        "@libsql/client": "^0.4.3",
+        "@libsql/kysely-libsql": "^0.3.0",
+        "consola": "^3.2.3",
+        "fs-extra": "^11.2.0",
+        "hono": "^4.0.1",
+        "kysely": "^0.27.2",
+        "oslo": "^1.1.0",
+        "typeid-js": "^0.5.0",
+        "valibot": "^0.28.1"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.5.3",
+        "@types/fs-extra": "^11.0.4",
+        "@types/node": "^20.11.17",
+        "esbuild": "^0.20.0",
+        "husky": "^9.0.10",
+        "npm-check-updates": "^16.14.15",
+        "rimraf": "^5.0.5",
+        "tsx": "^4.7.1",
+        "wireit": "^0.14.4"
+    },
+    "engines": {
+        "node": ">=20.11.0"
+    }
+}

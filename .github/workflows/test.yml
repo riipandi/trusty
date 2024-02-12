@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: Test
+
+on:
+  push:
+    branches: ['**']
+    tags-ignore: ['*']
+  pull_request:
+
+permissions: read-all
+
+env:
+  HUSKY: 0
+
+jobs:
+  test:
+    name: Test
+    strategy:
+      matrix:
+        # ubuntu-latest, macOS-latest, windows-2019
+        os: [ubuntu-latest]
+        node-version: [20]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run actions/setup-sdk@local
+        uses: ./.github/setup-sdk
+        with:
+          nodeVersion: ${{ matrix.node-version }}
+
+      - if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        run: pnpm install
+
+      - name: Check code quality
+        run: |
+          pnpm exec biome check --apply .
+          pnpm exec biome format . --write
+          pnpm exec biome lint --apply .
+
+      - name: Build the application
+        run: pnpm build
+        env:
+          NODE_ENV: production
