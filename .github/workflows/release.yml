@@ -57,7 +57,7 @@ jobs:
 
   release-to-ghcr:
     needs: [build-release]
-    name: Release Docker container
+    name: Docker images
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
