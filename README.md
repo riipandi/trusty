@@ -32,13 +32,13 @@ This project is open-sourced software licensed under the [Apache License 2.0][ch
 
 See the [license file](./LICENSE) for more information.
 
----
-
 ## 📚 References
 
 - [LibSQL extensions documentation](https://docs.turso.tech/extensions)
 - [Local development with LibSQL](https://docs.turso.tech/local-development)
 - [SQLite tutorials](https://www.sqlitetutorial.net)
+
+---
 
 <sub>🤫 Psst! If you like my work you can support me via [GitHub sponsors](https://github.com/sponsors/riipandi).</sub>
 
