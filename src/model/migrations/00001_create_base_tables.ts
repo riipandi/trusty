@@ -1,7 +1,7 @@
-import { Kysely } from "kysely";
 import { Database } from "@/model/client";
 import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN, TIMESTAMP_MS } from "@/model/extends";
 import { type TableIndexBuilder, createIndex } from "@/model/extends";
+import { Kysely } from "kysely";
 
 const USERS_TABLE = "users";
 const PASSWORDS_TABLE = "passwords";
