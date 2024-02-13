@@ -22,15 +22,15 @@ async function runMigration() {
   const { error, results } = await migrator.migrateToLatest();
 
   if (error) {
-    consola.error("🔥 failed to migrate", error);
+    consola.error("🔥 Failed to migrate", error);
     process.exit(1);
   }
 
   results?.map((it) => {
     if (it.status === "Success") {
-      consola.info(`⌛️ migration "${it.migrationName}" was executed successfully`);
+      consola.info(`⌛️ Migration "${it.migrationName}" was executed successfully`);
     } else if (it.status === "Error") {
-      consola.error(`🔥 failed to execute migration "${it.migrationName}"`);
+      consola.error(`🔥 Failed to execute migration "${it.migrationName}"`);
     }
   });
 
@@ -41,15 +41,15 @@ async function rollbackMigration() {
   const { error, results } = await migrator.migrateTo(NO_MIGRATIONS);
 
   if (error) {
-    consola.error("🔥 failed to rollback", error);
+    consola.error("🔥 Failed to rollback", error);
     process.exit(1);
   }
 
   return results?.map((it) => {
     if (it.status === "Success") {
-      consola.info(`⌛️ rolling back to "${it.migrationName}"`);
+      consola.info(`⌛️ Rolling back to "${it.migrationName}"`);
     } else if (it.status === "Error") {
-      consola.error(`🔥 failed to rollback migration "${it.migrationName}"`);
+      consola.error(`🔥 Failed to rollback migration "${it.migrationName}"`);
     }
   });
 }
@@ -67,7 +67,9 @@ async function runSeeder() {
     .finally(async () => await db.destroy());
 }
 
-switch (process.argv[2]) {
+type Commands = "rollback" | "seed";
+
+switch (process.argv[2] as Commands) {
   case "rollback":
     consola.info("🍀 Rolling back migration...");
     rollbackMigration();

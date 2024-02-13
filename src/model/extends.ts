@@ -1,5 +1,5 @@
-import { CreateTableBuilder, Kysely, sql } from "kysely";
 import { Database } from "@/model/client";
+import { CreateTableBuilder, Kysely, sql } from "kysely";
 
 // Timestamp in milliseconds for `created_at` column.
 // ISO 8601 UTC timestamp: sql.raw("SELECT strftime('%Y-%m-%dT%H:%M:%fZ', 'now')")
@@ -29,15 +29,24 @@ export const addSoftDeleteColumn = <T extends string, C extends string = never>(
   builder: CreateTableBuilder<T, C>,
 ) => builder.addColumn("deleted_at", "integer");
 
-export type QueryCreateIndex = { name: string; column: string; condition: string };
+export type TableIndexBuilder = {
+  kind: "unique" | "normal";
+  name: string;
+  column: string | string[];
+  condition?: string;
+};
 
-export async function createUniqueIndex(
+export async function createIndex(
   db: Kysely<Database>,
   table: string,
-  index: QueryCreateIndex,
+  index: TableIndexBuilder,
 ): Promise<void> {
   // Get all indexes: SELECT name FROM sqlite_master WHERE type='index';
-  const query = `CREATE UNIQUE INDEX IF NOT EXISTS ${index.name} ON ${table} (${index.column}) ${index.condition};`;
+  const { kind, name, column, condition } = index;
+  const unique = kind === "unique" ? "UNIQUE " : "";
+  const params = `${name} ON ${table} (${column}) ${condition ?? ""}`;
+  const query = `CREATE ${unique}INDEX IF NOT EXISTS ${params};`;
+
   await sql
     .raw(query)
     .execute(db)
