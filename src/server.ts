@@ -1,6 +1,5 @@
 import { serve } from "@hono/node-server";
 import { consola } from "consola";
-import "dotenv/config";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
