@@ -6,10 +6,7 @@ export async function rootHandler(c: Context) {
 }
 
 export async function apiRootHandler(c: Context) {
-  return jsonResponse(c, undefined, {
-    remoteAddress: c.env.incoming.socket.remoteAddress,
-    userAgent: c.req.header("User-Agent"),
-  });
+  return jsonResponse(c, `Trusty API v1`);
 }
 
 export async function healthCheckHandler(c: Context) {

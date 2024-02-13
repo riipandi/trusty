@@ -3,7 +3,8 @@ import { LibsqlDialect } from "@libsql/kysely-libsql";
 import { ColumnType, Kysely } from "kysely";
 
 import { SessionTable } from "@/model/schema/session.schema";
-import { PasswordTable, UserTable } from "@/model/schema/user.schema";
+import { UserTable } from "@/model/schema/user.schema";
+import { PasswordTable } from "@/model/schema/password.schema";
 
 import env from "@/config";
 
@@ -33,17 +34,17 @@ export interface WithSoftDeleteSchema {
 
 export const db: Kysely<Database> = new Kysely<Database>({
   dialect: new LibsqlDialect({
-    url: env.LIBSQL_CLIENT_URL,
-    authToken: env.LIBSQL_CLIENT_TOKEN,
+    url: env.DATABASE_URL,
+    authToken: env.DATABASE_TOKEN,
   }),
   log: env.NODE_ENV === "development" ? ["error", "query"] : ["error"],
 });
 
 export const sqlc: LibSQLClient = createClient({
-  url: env.LIBSQL_CLIENT_URL,
-  authToken: env.LIBSQL_CLIENT_TOKEN,
+  url: env.DATABASE_URL,
+  authToken: env.DATABASE_TOKEN,
   // @ref: https://github.com/tursodatabase/libsql-client-ts/blob/main/packages/libsql-client/examples/sync.js
-  // syncUrl: env.LIBSQL_CLIENT_URL, // Sync mode
+  // syncUrl: env.DATABASE_URL, // Sync mode
 });
 
-export type DB = Kysely<Database>;
+export type KyselyDatabase = Kysely<Database>;

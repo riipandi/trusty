@@ -2,8 +2,9 @@
 
 /**
  * Build static frontend assets
- * @ref: https://esbuild.github.io/getting-started/#bundling-for-the-browser
- * @ref: https://esbuild.github.io/api/#target
+ *  @ref: https://esbuild.github.io/getting-started/#bundling-for-node
+ *  @ref: https://esbuild.github.io/api/#target
+ *  @ref: https://oslo.js.org/reference/password
  */
 
 import { build } from "esbuild";
@@ -11,18 +12,19 @@ import { build } from "esbuild";
 await build({
   entryPoints: ["src/**/*.ts"],
   outdir: "dist",
-  target: "node20",
+  target: ["node20"],
   platform: "node",
   format: "cjs",
   bundle: true,
   sourcemap: false,
   allowOverwrite: true,
   outExtension: { ".js": ".cjs" },
+  external: ["@node-rs/argon2", "@node-rs/bcrypt"],
   minify: process.env.NODE_ENV === "production",
   drop: ["console", "debugger"],
   loader: { ".ts": "ts" },
   tsconfig: "tsconfig.json",
-  packages: "external",
+  // packages: "external",
   alias: {
     "@/*": "./src/*",
   },

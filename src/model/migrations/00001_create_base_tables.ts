@@ -1,16 +1,53 @@
-import { Database } from "@/model/client";
-import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN, TIMESTAMP_MS } from "@/model/extends";
+import type { KyselyDatabase } from "@/model/client";
+import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN } from "@/model/extends";
 import { type TableIndexBuilder, createIndex } from "@/model/extends";
-import { Kysely } from "kysely";
 
-const USERS_TABLE = "users";
-const PASSWORDS_TABLE = "passwords";
-const SESSIONS_TABLE = "sessions";
-const REFRESH_TOKENS_TABLE = "refresh_tokens";
-const IDENTITIES_TABLE = "identities";
-const AUDIT_LOG_TABLE = "audit_log";
+import * as tUser from "@/model/schema/user.schema";
+import * as tPassword from "@/model/schema/password.schema";
+import * as tSession from "@/model/schema/session.schema";
+import * as tIdentities from "@/model/schema/identities.schema";
+import * as tRefreshToken from "@/model/schema/refresh_token.schema";
+import * as tAuditLog from "@/model/schema/audit_log.schema";
 
-const USERS_TABLE_INDEXES: TableIndexBuilder[] = [
+//----------------------------------------------------------------------------
+// Query to create `users` table
+//----------------------------------------------------------------------------
+export const UserMigrationQuery = (db: KyselyDatabase) =>
+  db.schema
+    .createTable(tUser.TABLE_NAME)
+    .$call(PRIMARY_KEY_COLUMN)
+    .addColumn("aud", "text")
+    .addColumn("role", "text")
+    .addColumn("email", "text", (col) => col.unique().notNull())
+    .addColumn("email_change_token_new", "text")
+    .addColumn("email_change", "text")
+    .addColumn("email_change_token_current", "text", (col) => col.defaultTo(""))
+    .addColumn("email_change_confirm_status", "integer", (col) => col.notNull().defaultTo(0))
+    .addColumn("phone", "text", (col) => col.unique())
+    .addColumn("phone_change", "text", (col) => col.defaultTo(""))
+    .addColumn("phone_change_token", "text", (col) => col.defaultTo(""))
+    .addColumn("raw_app_meta_data", "jsonb")
+    .addColumn("raw_user_meta_data", "json")
+    .addColumn("confirmation_token", "text")
+    .addColumn("recovery_token", "text")
+    .addColumn("reauthentication_token", "text", (col) => col.defaultTo(""))
+    .addColumn("is_super_admin", "integer", (col) => col.notNull().defaultTo(false))
+    .addColumn("is_sso_user", "integer", (col) => col.notNull().defaultTo(false))
+    .addColumn("last_sign_in_at", "integer")
+    .addColumn("banned_until", "integer")
+    .addColumn("invited_at", "integer")
+    .addColumn("email_confirmed_at", "integer")
+    .addColumn("email_change_sent_at", "integer")
+    .addColumn("phone_confirmed_at", "integer")
+    .addColumn("phone_change_sent_at", "integer")
+    .addColumn("confirmation_sent_at", "integer")
+    .addColumn("recovery_sent_at", "integer")
+    .addColumn("reauthentication_sent_at", "integer")
+    .addColumn("confirmed_at", "integer")
+    .$call(TIMESTAMPS_COLUMN)
+    .ifNotExists();
+
+export const UserTableIndexes: TableIndexBuilder[] = [
   {
     kind: "normal",
     name: "users_email_idx",
@@ -59,116 +96,71 @@ const USERS_TABLE_INDEXES: TableIndexBuilder[] = [
   },
 ];
 
-export async function up(db: Kysely<Database>): Promise<void> {
-  //----------------------------------------------------------------------------
-  // Query to create `users` table
-  //----------------------------------------------------------------------------
-  await db.schema
-    .createTable(USERS_TABLE)
-    .$call(PRIMARY_KEY_COLUMN)
-    .addColumn("aud", "text")
-    .addColumn("role", "text")
-    .addColumn("email", "text", (col) => col.unique().notNull())
-    .addColumn("email_change_token_new", "text")
-    .addColumn("email_change", "text")
-    .addColumn("email_change_token_current", "text", (col) => col.defaultTo(""))
-    .addColumn("email_change_confirm_status", "integer", (col) => col.notNull().defaultTo(0))
-    .addColumn("phone", "text", (col) => col.unique())
-    .addColumn("phone_change", "text", (col) => col.defaultTo(""))
-    .addColumn("phone_change_token", "text", (col) => col.defaultTo(""))
-    .addColumn("raw_app_meta_data", "jsonb")
-    .addColumn("raw_user_meta_data", "json")
-    .addColumn("confirmation_token", "text")
-    .addColumn("recovery_token", "text")
-    .addColumn("reauthentication_token", "text", (col) => col.defaultTo(""))
-    .addColumn("is_super_admin", "integer", (col) => col.notNull().defaultTo(false))
-    .addColumn("is_sso_user", "integer", (col) => col.notNull().defaultTo(false))
-    .addColumn("last_sign_in_at", "integer")
-    .addColumn("banned_until", "integer")
-    .addColumn("invited_at", "integer")
-    .addColumn("email_confirmed_at", "integer")
-    .addColumn("email_change_sent_at", "integer")
-    .addColumn("phone_confirmed_at", "integer")
-    .addColumn("phone_change_sent_at", "integer")
-    .addColumn("confirmation_sent_at", "integer")
-    .addColumn("recovery_sent_at", "integer")
-    .addColumn("reauthentication_sent_at", "integer")
-    .addColumn("confirmed_at", "integer")
-    .$call(TIMESTAMPS_COLUMN)
-    .ifNotExists()
-    .execute()
-    .then(async () => {
-      await Promise.all(USERS_TABLE_INDEXES.map((index) => createIndex(db, USERS_TABLE, index)));
-    });
-
-  //----------------------------------------------------------------------------
-  // Query to create `passwords` table
-  //----------------------------------------------------------------------------
-  await db.schema
-    .createTable(PASSWORDS_TABLE)
+//----------------------------------------------------------------------------
+// Query to create `passwords` table
+//----------------------------------------------------------------------------
+export const PasswordMigrationQuery = (db: KyselyDatabase) =>
+  db.schema
+    .createTable(tPassword.TABLE_NAME)
     .addColumn("user_id", "text", (col) =>
       col.primaryKey().references("users.id").onDelete("no action"),
     )
     .addColumn("encrypted_password", "text", (col) => col.notNull())
     .$call(TIMESTAMPS_COLUMN)
-    .ifNotExists()
-    .execute();
+    .ifNotExists();
 
-  //----------------------------------------------------------------------------
-  // Query to create `sessions` table
-  //----------------------------------------------------------------------------
-  await db.schema
-    .createTable(SESSIONS_TABLE)
-    .$call(PRIMARY_KEY_COLUMN)
-    // .addColumn("user_id", "text", (col) => col.references("users.id").onDelete("cascade").notNull())
-    .addColumn("user_id", "text", (col) => col.notNull())
-    .addColumn("expires_at", "integer", (col) => col.notNull())
-    .addColumn("created_at", "integer", (col) => col.defaultTo(TIMESTAMP_MS).notNull())
-    .addForeignKeyConstraint(`${SESSIONS_TABLE}_user_id_fk`, ["user_id"], "users", ["id"], (cb) =>
-      cb.onDelete("cascade"),
-    )
-    .ifNotExists()
-    .execute();
+export const PasswordTableIndexes: TableIndexBuilder[] = [];
 
-  //----------------------------------------------------------------------------
-  // Query to create `refresh_tokens` table
-  //----------------------------------------------------------------------------
-  await db.schema
-    .createTable(REFRESH_TOKENS_TABLE)
-    .$call(PRIMARY_KEY_COLUMN)
-    .$call(TIMESTAMPS_COLUMN)
-    .ifNotExists()
-    .execute();
+//----------------------------------------------------------------------------
+// Query to create `sessions` table
+//----------------------------------------------------------------------------
 
-  //----------------------------------------------------------------------------
-  // Query to create `identities` table
-  //----------------------------------------------------------------------------
-  await db.schema
-    .createTable(IDENTITIES_TABLE)
-    .$call(PRIMARY_KEY_COLUMN)
-    .$call(TIMESTAMPS_COLUMN)
-    .ifNotExists()
-    .execute();
+//----------------------------------------------------------------------------
+// Query to create `refresh_tokens` table
+//----------------------------------------------------------------------------
 
-  //----------------------------------------------------------------------------
-  // Query to create `audit_log` table
-  //----------------------------------------------------------------------------
-  await db.schema
-    .createTable(AUDIT_LOG_TABLE)
-    .$call(PRIMARY_KEY_COLUMN)
-    .$call(TIMESTAMPS_COLUMN)
-    .ifNotExists()
-    .execute();
+//----------------------------------------------------------------------------
+// Query to create `identities` table
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Query to create `audit_log` table
+//----------------------------------------------------------------------------
+
+export async function up(db: KyselyDatabase): Promise<void> {
+  // Run `users` table migration
+  await UserMigrationQuery(db).execute();
+  await Promise.all(UserTableIndexes.map((index) => createIndex(db, tUser.TABLE_NAME, index)));
+
+  // Run `passwords` table migration
+  await PasswordMigrationQuery(db).execute();
+
+  // Run `sessions` table migration
+  await tSession.MigrationQuery(db).execute();
+
+  // Run `refresh_tokens` table migration
+  await tRefreshToken.MigrationQuery(db).execute();
+
+  // Run `identities` table migration
+  await tIdentities.MigrationQuery(db).execute();
+
+  // Run `audit_log` table migration
+  await tAuditLog.MigrationQuery(db).execute();
 }
 
-export async function down({ schema }: Kysely<Database>): Promise<void> {
+export async function down({ schema }: KyselyDatabase): Promise<void> {
   await Promise.all(
-    USERS_TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+    // tAuditLog.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+    // tIdentities.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+    // tRefreshToken.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+    // tSession.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+    // tPassword.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+    UserTableIndexes.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
   );
-  await schema.dropTable(AUDIT_LOG_TABLE).ifExists().execute();
-  await schema.dropTable(IDENTITIES_TABLE).ifExists().execute();
-  await schema.dropTable(REFRESH_TOKENS_TABLE).ifExists().execute();
-  await schema.dropTable(SESSIONS_TABLE).ifExists().execute();
-  await schema.dropTable(PASSWORDS_TABLE).ifExists().execute();
-  await schema.dropTable(USERS_TABLE).ifExists().execute();
+  await schema.dropTable(tAuditLog.TABLE_NAME).ifExists().execute();
+  await schema.dropTable(tIdentities.TABLE_NAME).ifExists().execute();
+  await schema.dropTable(tRefreshToken.TABLE_NAME).ifExists().execute();
+  await schema.dropTable(tSession.TABLE_NAME).ifExists().execute();
+  await schema.dropTable(tPassword.TABLE_NAME).ifExists().execute();
+  await schema.dropTable(tUser.TABLE_NAME).ifExists().execute();
 }

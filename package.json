@@ -13,6 +13,7 @@
         "db:migrate": "tsx src/migrate.ts",
         "db:rollback": "tsx src/migrate.ts rollback",
         "db:seed": "tsx src/migrate.ts seed",
+        "db:generate": "tsx src/migrate.ts generate-sql",
         "docker:build": "docker build -f Dockerfile . -t $npm_package_config_image:latest -t $npm_package_config_image:$npm_package_version",
         "docker:run": "docker run --rm -it -p 8030:8030 --env-file .env --name $npm_package_name $npm_package_config_image:latest",
         "docker:push": "docker push $npm_package_config_image:latest && docker push $npm_package_config_image:$npm_package_version",

@@ -13,3 +13,4 @@ CODE_OF_CONDUCT.md
 README.md
 static/*
 !static/robots.txt
+src/model/generated/

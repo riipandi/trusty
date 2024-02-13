@@ -39,5 +39,11 @@ export async function whoami(c: Context) {
     return throwResponse(c, 201, "No data");
   }
 
-  return jsonResponse(c, undefined, jwtPayload);
+  const payload = {
+    remoteAddress: c.env.incoming.socket.remoteAddress,
+    userAgent: c.req.header("User-Agent"),
+    jwt: jwtPayload,
+  };
+
+  return jsonResponse(c, undefined, payload);
 }

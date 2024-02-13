@@ -8,8 +8,8 @@ const envars = {
   PORT: parseInt(env.PORT as string) || 8030,
   APP_BASE_URL: env.APP_BASE_URL as string,
   APP_SECRET_KEY: env.APP_SECRET_KEY as string,
-  LIBSQL_CLIENT_URL: env.LIBSQL_CLIENT_URL as string,
-  LIBSQL_CLIENT_TOKEN: env.LIBSQL_CLIENT_TOKEN as string,
+  DATABASE_URL: env.DATABASE_URL as string,
+  DATABASE_TOKEN: env.DATABASE_TOKEN as string,
 };
 
 export default envars;

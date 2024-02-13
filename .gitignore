@@ -62,3 +62,4 @@ testem.log
 # Project specific
 /static/*
 !/static/robots.txt
+src/model/generated/

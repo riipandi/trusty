@@ -1,5 +1,7 @@
-import { WithTimeStampSchema } from "@/model/client";
 import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
+import { WithTimeStampSchema } from "@/model/client";
+
+export const TABLE_NAME = "users";
 
 export interface UserTable extends WithTimeStampSchema {
   id: Generated<string>;
@@ -36,12 +38,3 @@ export interface UserTable extends WithTimeStampSchema {
 export type User = Selectable<UserTable>;
 export type InsertUser = Insertable<UserTable>;
 export type UpdateUser = Updateable<UserTable>;
-
-export interface PasswordTable extends WithTimeStampSchema {
-  user_id: string | null;
-  encrypted_password: string | null;
-}
-
-export type Password = Selectable<PasswordTable>;
-export type InsertPassword = Insertable<PasswordTable>;
-export type UpdatePassword = Updateable<PasswordTable>;
