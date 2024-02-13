@@ -1,7 +1,7 @@
-import { Context } from "hono";
-import { db } from "@/model/client";
 import { jsonResponse, throwResponse } from "@/http/response";
+import { db } from "@/model/client";
 import * as userRepo from "@/model/repository/user.repo";
+import { Context } from "hono";
 
 export async function getUsers(c: Context) {
   const users = await userRepo.findAllUsers(db);

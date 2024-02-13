@@ -4,8 +4,8 @@ import { prettyJSON } from "hono/pretty-json";
 import { secureHeaders } from "hono/secure-headers";
 
 import { Bindings } from "@/binding";
-import { validateJsonRequest } from "@/http/request";
 import { jwtMiddleware } from "@/http/middleware/jwt";
+import { validateJsonRequest } from "@/http/request";
 import { LoginRequestSchema } from "@/http/validator/auth";
 
 import * as authHandler from "@/http/handler/auth";
