@@ -19,12 +19,11 @@ await build({
   sourcemap: false,
   allowOverwrite: true,
   outExtension: { ".js": ".cjs" },
-  external: ["@node-rs/argon2", "@node-rs/bcrypt"],
   minify: process.env.NODE_ENV === "production",
   drop: ["console", "debugger"],
   loader: { ".ts": "ts" },
   tsconfig: "tsconfig.json",
-  // packages: "external",
+  packages: "external",
   alias: {
     "@/*": "./src/*",
   },

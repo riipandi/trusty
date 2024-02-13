@@ -28,7 +28,7 @@ beyond writing code. You can read this repository’s [Contributing Guidelines]
 
 ## 📑 License
 
-This project licensed under the [GNU Affero General Public License v3.0 (GNU AGPLv3)][choosealicense].
+This project is open-sourced software licensed under the [Apache License 2.0][choosealicense].
 
 See the [license file](./LICENSE) for more information.
 
@@ -44,5 +44,5 @@ See the [license file](./LICENSE) for more information.
 
 [![Made by](https://badgen.net/badge/icon/Made%20by%20Aris%20Ripandi?icon=bitcoin-lightning&label&color=black&labelColor=black)][riipandi-twitter]
 
-[choosealicense]: https://choosealicense.com/licenses/agpl-3.0/
+[choosealicense]: https://choosealicense.com/licenses/apache-2.0/
 [riipandi-twitter]: https://twitter.com/intent/follow?original_referer=https://ripandis.com&screen_name=riipandi
