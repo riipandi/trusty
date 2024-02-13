@@ -21,7 +21,7 @@ export interface UserTable extends WithTimeStampSchema {
   recovery_token?: string | null;
   reauthentication_token?: string | null;
   is_super_admin: boolean;
-  is_sso_user: boolean;
+  is_sso_user?: boolean;
   last_sign_in_at?: ColumnType<Date, number | undefined, never>;
   banned_until?: ColumnType<Date, number | undefined, never>;
   invited_at?: ColumnType<Date, number | undefined, never>;

@@ -17,8 +17,9 @@ app.use("*", logger());
 app.use("*", etag());
 app.use("*", csrf({ origin: "*" }));
 
-app.get("/", handler.rootHandler);
-app.get("/health", handler.healthCheckHandler);
+app.get("/", (c) => c.redirect("/ui"));
+app.get("/ui", handler.rootHandler);
+app.get("/admin", handler.adminDashboardHandler);
 
 // Error handling
 app.notFound((c) => throwResponse(c, 404, "Resource not found"));

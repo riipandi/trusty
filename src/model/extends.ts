@@ -1,5 +1,5 @@
-import { Database } from "@/model/client";
-import { CreateTableBuilder, Kysely, sql } from "kysely";
+import type { KyselyDatabase } from "@/model/client";
+import { CreateTableBuilder, sql } from "kysely";
 
 // Timestamp in milliseconds for `created_at` column.
 // ISO 8601 UTC timestamp: sql.raw("SELECT strftime('%Y-%m-%dT%H:%M:%fZ', 'now')")
@@ -37,7 +37,7 @@ export type TableIndexBuilder = {
 };
 
 export async function createIndex(
-  db: Kysely<Database>,
+  db: KyselyDatabase,
   table: string,
   index: TableIndexBuilder,
 ): Promise<void> {

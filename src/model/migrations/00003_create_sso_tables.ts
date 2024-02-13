@@ -1,6 +1,5 @@
-import { Database } from "@/model/client";
-import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN, TIMESTAMP_MS } from "@/model/extends";
-import { Kysely } from "kysely";
+import type { KyselyDatabase } from "@/model/client";
+import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN } from "@/model/extends";
 
 const FLOW_STATE_TABLE = "flow_state";
 const SSO_PROVIDERS_TABLE = "sso_providers";
@@ -8,7 +7,7 @@ const SSO_DOMAINS_TABLE = "sso_domains";
 const SAML_PROVIDERS_TABLE = "saml_providers";
 const SAML_RELAY_STATES_TABLE = "saml_relay_states";
 
-export async function up(db: Kysely<Database>): Promise<void> {
+export async function up(db: KyselyDatabase): Promise<void> {
   //----------------------------------------------------------------------------
   // Query to create `flow_state` table
   //----------------------------------------------------------------------------
@@ -59,7 +58,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .execute();
 }
 
-export async function down(db: Kysely<Database>): Promise<void> {
+export async function down(db: KyselyDatabase): Promise<void> {
   await db.schema.dropTable(SAML_RELAY_STATES_TABLE).ifExists().execute();
   await db.schema.dropTable(SAML_PROVIDERS_TABLE).ifExists().execute();
   await db.schema.dropTable(SSO_DOMAINS_TABLE).ifExists().execute();

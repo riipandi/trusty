@@ -69,10 +69,27 @@ docker run --rm -it --name trusty --env-file .env -p 8030:8030 ghcr.io/riipandi/
 
 ### Simple Load Testing
 
-Using [`hey`](https://github.com/rakyll/hey) to perform a simple load testing.
+Using [`hey`](https://github.com/rakyll/hey) to perform a load testing:
 
 ```sh
 hey -n 1000 -c 200 -z 30s -m GET -T "application/json" https://localhost:8030/api/health
+```
+
+Using [`drill`](https://github.com/fcsonline/drill) to perform a load testing:
+
+```sh
+I=1000 C=10 drill -s --benchmark benchmark.yml --tags post_auth
+```
+
+Using [`vegeta`](https://github.com/tsenart/vegeta) to perform a load testing:
+
+```sh
+echo "GET http://localhost:8030/api" | vegeta attack -duration=5s | tee benchmark-results.bin | vegeta report
+
+# With authentication
+echo "GET http://localhost:8030/api/users" | \
+ vegeta attack -duration=5s -header "Authorization: Token ${JWT_TOKEN}" | \
+ tee benchmark-results.bin | vegeta report
 ```
 
 [pull-requests-docs]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork

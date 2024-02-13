@@ -63,3 +63,4 @@ testem.log
 /static/*
 !/static/robots.txt
 src/model/generated/
+benchmark-results.bin

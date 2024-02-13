@@ -1,7 +1,5 @@
-import { type KyselyDatabase, WithTimeStampSchema } from "@/model/client";
-import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN } from "@/model/extends";
-import type { TableIndexBuilder } from "@/model/extends";
-import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
+import { WithTimeStampSchema } from "@/model/client";
+import { Insertable, Selectable, Updateable } from "kysely";
 
 export const TABLE_NAME = "passwords";
 

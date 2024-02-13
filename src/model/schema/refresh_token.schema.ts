@@ -1,15 +1,10 @@
-import { type KyselyDatabase, WithTimeStampSchema } from "@/model/client";
-import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN } from "@/model/extends";
-import type { TableIndexBuilder } from "@/model/extends";
-import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
+import { WithTimeStampSchema } from "@/model/client";
+import { Insertable, Selectable, Updateable } from "kysely";
 
 export const TABLE_NAME = "refresh_tokens";
 
-export const MigrationQuery = (db: KyselyDatabase) =>
-  db.schema
-    .createTable(TABLE_NAME)
-    .$call(PRIMARY_KEY_COLUMN)
-    .$call(TIMESTAMPS_COLUMN)
-    .ifNotExists();
+export interface RefreshTokenTable extends WithTimeStampSchema {}
 
-export const TABLE_INDEXES: TableIndexBuilder[] = [];
+export type RefreshToken = Selectable<RefreshTokenTable>;
+export type InsertRefreshToken = Insertable<RefreshTokenTable>;
+export type UpdateRefreshToken = Updateable<RefreshTokenTable>;
