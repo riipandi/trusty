@@ -14,6 +14,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable(MFA_AMR_CLAIMS_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
+    .ifNotExists()
     .execute();
 
   //----------------------------------------------------------------------------
@@ -23,6 +24,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable(MFA_CHALLENGES_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
+    .ifNotExists()
     .execute();
 
   //----------------------------------------------------------------------------
@@ -32,11 +34,12 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable(MFA_FACTORS_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
+    .ifNotExists()
     .execute();
 }
 
 export async function down(db: Kysely<Database>): Promise<void> {
-  await db.schema.dropTable(MFA_FACTORS_TABLE).execute();
-  await db.schema.dropTable(MFA_CHALLENGES_TABLE).execute();
-  await db.schema.dropTable(MFA_AMR_CLAIMS_TABLE).execute();
+  await db.schema.dropTable(MFA_FACTORS_TABLE).ifExists().execute();
+  await db.schema.dropTable(MFA_CHALLENGES_TABLE).ifExists().execute();
+  await db.schema.dropTable(MFA_AMR_CLAIMS_TABLE).ifExists().execute();
 }

@@ -38,12 +38,12 @@ CREATE TABLE IF NOT EXISTS users (
     CHECK(email_change_confirm_status >= 0 AND email_change_confirm_status <= 2)
 );
 
-CREATE UNIQUE INDEX confirmation_token_idx ON users (confirmation_token) WHERE confirmation_token NOT LIKE '^[0-9 ]*$';
-CREATE UNIQUE INDEX email_change_token_current_idx ON users (email_change_token_current) WHERE email_change_token_current NOT LIKE '^[0-9 ]*$';
-CREATE UNIQUE INDEX email_change_token_new_idx ON users (email_change_token_new) WHERE email_change_token_new NOT LIKE '^[0-9 ]*$';
-CREATE UNIQUE INDEX reauthentication_token_idx ON users (reauthentication_token) WHERE reauthentication_token NOT LIKE '^[0-9 ]*$';
-CREATE UNIQUE INDEX recovery_token_idx ON users (recovery_token) WHERE recovery_token NOT LIKE '^[0-9 ]*$';
-CREATE UNIQUE INDEX users_email_partial_key ON users (email) WHERE is_sso_user = 0;
+CREATE UNIQUE INDEX IF NOT EXISTS confirmation_token_idx ON users (confirmation_token) WHERE confirmation_token NOT LIKE '^[0-9 ]*$';
+CREATE UNIQUE INDEX IF NOT EXISTS email_change_token_current_idx ON users (email_change_token_current) WHERE email_change_token_current NOT LIKE '^[0-9 ]*$';
+CREATE UNIQUE INDEX IF NOT EXISTS email_change_token_new_idx ON users (email_change_token_new) WHERE email_change_token_new NOT LIKE '^[0-9 ]*$';
+CREATE UNIQUE INDEX IF NOT EXISTS reauthentication_token_idx ON users (reauthentication_token) WHERE reauthentication_token NOT LIKE '^[0-9 ]*$';
+CREATE UNIQUE INDEX IF NOT EXISTS recovery_token_idx ON users (recovery_token) WHERE recovery_token NOT LIKE '^[0-9 ]*$';
+CREATE UNIQUE INDEX IF NOT EXISTS users_email_partial_key ON users (email) WHERE is_sso_user = 0;
 
 -- -----------------------------------------------------------------------------
 -- Query to create `passwords` table

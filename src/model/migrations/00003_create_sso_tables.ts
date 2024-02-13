@@ -16,6 +16,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable(FLOW_STATE_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
+    .ifNotExists()
     .execute();
 
   //----------------------------------------------------------------------------
@@ -25,6 +26,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable(SSO_PROVIDERS_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
+    .ifNotExists()
     .execute();
   //----------------------------------------------------------------------------
   // Query to create `sso_domains` table
@@ -33,6 +35,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable(SSO_DOMAINS_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
+    .ifNotExists()
     .execute();
 
   //----------------------------------------------------------------------------
@@ -42,6 +45,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable(SAML_PROVIDERS_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
+    .ifNotExists()
     .execute();
 
   //----------------------------------------------------------------------------
@@ -51,13 +55,14 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable(SAML_RELAY_STATES_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
+    .ifNotExists()
     .execute();
 }
 
 export async function down(db: Kysely<Database>): Promise<void> {
-  await db.schema.dropTable(SAML_RELAY_STATES_TABLE).execute();
-  await db.schema.dropTable(SAML_PROVIDERS_TABLE).execute();
-  await db.schema.dropTable(SSO_DOMAINS_TABLE).execute();
-  await db.schema.dropTable(SSO_PROVIDERS_TABLE).execute();
-  await db.schema.dropTable(FLOW_STATE_TABLE).execute();
+  await db.schema.dropTable(SAML_RELAY_STATES_TABLE).ifExists().execute();
+  await db.schema.dropTable(SAML_PROVIDERS_TABLE).ifExists().execute();
+  await db.schema.dropTable(SSO_DOMAINS_TABLE).ifExists().execute();
+  await db.schema.dropTable(SSO_PROVIDERS_TABLE).ifExists().execute();
+  await db.schema.dropTable(FLOW_STATE_TABLE).ifExists().execute();
 }
