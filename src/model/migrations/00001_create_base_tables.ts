@@ -1,5 +1,5 @@
 import { Database } from "@/model/client";
-import { addPrimaryKeyUuidColumn, addTimeStampColumns, timestampMs } from "@/model/extends";
+import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN, TIMESTAMP_MS } from "@/model/extends";
 import { Kysely } from "kysely";
 
 const USERS_TABLE = "users";
@@ -15,11 +15,11 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(USERS_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
+    .$call(PRIMARY_KEY_COLUMN)
     .addColumn("email", "text", (col) => col.notNull().unique())
     .addColumn("first_name", "text", (col) => col.notNull())
     .addColumn("last_name", "text", (col) => col.notNull())
-    .$call(addTimeStampColumns)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 
   await db.schema.createIndex("users_email_index").on(USERS_TABLE).column("email").execute();
@@ -33,7 +33,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
       col.references("users.id").onDelete("no action").notNull().unique(),
     )
     .addColumn("encrypted_password", "text", (col) => col.notNull())
-    .$call(addTimeStampColumns)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 
   //----------------------------------------------------------------------------
@@ -41,10 +41,10 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(SESSIONS_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
+    .$call(PRIMARY_KEY_COLUMN)
     .addColumn("user_id", "text", (col) => col.references("users.id").onDelete("cascade").notNull())
     .addColumn("expires_at", "integer", (col) => col.notNull())
-    .addColumn("created_at", "integer", (col) => col.defaultTo(timestampMs).notNull())
+    .addColumn("created_at", "integer", (col) => col.defaultTo(TIMESTAMP_MS).notNull())
     .execute();
 
   //----------------------------------------------------------------------------
@@ -52,8 +52,8 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(REFRESH_TOKENS_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 
   //----------------------------------------------------------------------------
@@ -61,8 +61,8 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(IDENTITIES_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 
   //----------------------------------------------------------------------------
@@ -70,8 +70,8 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(AUDIT_LOG_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 }
 

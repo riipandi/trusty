@@ -1,17 +1,14 @@
-import path, { resolve, dirname } from "node:path";
+import path from "node:path";
+import { promises as fs } from "node:fs";
 import { fileURLToPath } from "node:url";
-
 import { consola } from "consola";
-import fs from "fs-extra";
 
 import { db } from "@/model/client";
 import { userSeeder } from "@/model/seeders/user.seed";
 import { FileMigrationProvider, Migrator, NO_MIGRATIONS } from "kysely";
 
-const _dirname =
-  typeof __dirname !== "undefined" ? __dirname : dirname(fileURLToPath(import.meta.url));
-
-const migrationFolder = resolve(_dirname, "model/migrations");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const migrationFolder = path.resolve(__dirname, "./model/migrations");
 
 const migrator = new Migrator({
   db,

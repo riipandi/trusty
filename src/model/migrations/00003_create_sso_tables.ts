@@ -1,5 +1,5 @@
 import { Database } from "@/model/client";
-import { addPrimaryKeyUuidColumn, addTimeStampColumns, timestampMs } from "@/model/extends";
+import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN, TIMESTAMP_MS } from "@/model/extends";
 import { Kysely } from "kysely";
 
 const FLOW_STATE_TABLE = "flow_state";
@@ -14,8 +14,8 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(FLOW_STATE_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 
   //----------------------------------------------------------------------------
@@ -23,16 +23,16 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(SSO_PROVIDERS_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
   //----------------------------------------------------------------------------
   // Query to create `sso_domains` table
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(SSO_DOMAINS_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 
   //----------------------------------------------------------------------------
@@ -40,8 +40,8 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(SAML_PROVIDERS_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 
   //----------------------------------------------------------------------------
@@ -49,8 +49,8 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(SAML_RELAY_STATES_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 }
 

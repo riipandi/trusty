@@ -1,5 +1,5 @@
 import { Database } from "@/model/client";
-import { addPrimaryKeyUuidColumn, addTimeStampColumns } from "@/model/extends";
+import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN } from "@/model/extends";
 import { Kysely } from "kysely";
 
 const MFA_AMR_CLAIMS_TABLE = "mfa_amr_claims";
@@ -12,8 +12,8 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(MFA_AMR_CLAIMS_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 
   //----------------------------------------------------------------------------
@@ -21,8 +21,8 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(MFA_CHALLENGES_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 
   //----------------------------------------------------------------------------
@@ -30,8 +30,8 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   await db.schema
     .createTable(MFA_FACTORS_TABLE)
-    .$call(addPrimaryKeyUuidColumn)
-    .$call(addTimeStampColumns)
+    .$call(PRIMARY_KEY_COLUMN)
+    .$call(TIMESTAMPS_COLUMN)
     .execute();
 }
 

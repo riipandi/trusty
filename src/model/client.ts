@@ -39,7 +39,9 @@ export const db = new Kysely<Database>({
   log: env.NODE_ENV === "development" ? ["error", "query"] : ["error"],
 });
 
-export const libsqlClient = createClient({
+export const sqlc = createClient({
   url: env.LIBSQL_CLIENT_URL,
   authToken: env.LIBSQL_CLIENT_TOKEN,
+  // @ref: https://github.com/tursodatabase/libsql-client-ts/blob/main/packages/libsql-client/examples/sync.js
+  // syncUrl: env.LIBSQL_CLIENT_URL, // Sync mode
 });
