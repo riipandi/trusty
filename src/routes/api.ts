@@ -9,8 +9,9 @@ import { validateJsonRequest } from "@/http/request";
 import { LoginRequestSchema } from "@/http/validator/auth";
 
 import * as authHandler from "@/http/handler/auth";
-import { apiRootHandler, healthCheckHandler } from "@/http/handler/root";
 import * as userHandler from "@/http/handler/user";
+import healthcheck from "@/http/healthcheck";
+import { jsonResponse } from "@/http/response";
 
 const corsMiddleware = cors({
   origin: "*",
@@ -21,30 +22,31 @@ const corsMiddleware = cors({
   maxAge: 600,
 });
 
-const api = new Hono<{ Bindings: Bindings }>();
+const route = new Hono<{ Bindings: Bindings }>();
 
-api.use("*", prettyJSON({ space: 2 }));
-api.use("*", secureHeaders());
-api.use("*", corsMiddleware);
+route.use("*", prettyJSON({ space: 2 }));
+route.use("*", secureHeaders());
+route.use("*", corsMiddleware);
 
 // Add X-Response-Time header
-api.use("*", async (c, next) => {
+route.use("*", async (c, next) => {
   const start = Date.now();
   await next();
   const ms = Date.now() - start;
   c.header("X-Response-Time", `${ms}ms`);
 });
 
-api.get("/", apiRootHandler);
-api.get("/health", healthCheckHandler);
+route.get("/", (c) => jsonResponse(c, `Trusty API v1`));
 
-api.use("/users/*", jwtMiddleware);
-api.get("/users", userHandler.getUsers);
-api.get("/users/:id", userHandler.getUserById);
+route.get("/health", healthcheck);
 
-api.post("/auth/login", validateJsonRequest(LoginRequestSchema), authHandler.login);
+route.use("/users/*", jwtMiddleware);
+route.get("/users", userHandler.getUsers);
+route.get("/users/:id", userHandler.getUserById);
 
-api.use("/auth/whoami", jwtMiddleware);
-api.get("/auth/whoami", authHandler.whoami);
+route.post("/auth/login", validateJsonRequest(LoginRequestSchema), authHandler.login);
 
-export default api;
+route.use("/auth/whoami", jwtMiddleware);
+route.get("/auth/whoami", authHandler.whoami);
+
+export default route;
