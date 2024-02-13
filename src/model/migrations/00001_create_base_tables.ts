@@ -2,12 +2,12 @@ import type { KyselyDatabase } from "@/model/client";
 import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN } from "@/model/extends";
 import { type TableIndexBuilder, createIndex } from "@/model/extends";
 
-import * as tUser from "@/model/schema/user.schema";
-import * as tPassword from "@/model/schema/password.schema";
-import * as tSession from "@/model/schema/session.schema";
-import * as tIdentities from "@/model/schema/identities.schema";
-import * as tRefreshToken from "@/model/schema/refresh_token.schema";
 import * as tAuditLog from "@/model/schema/audit_log.schema";
+import * as tIdentities from "@/model/schema/identities.schema";
+import * as tPassword from "@/model/schema/password.schema";
+import * as tRefreshToken from "@/model/schema/refresh_token.schema";
+import * as tSession from "@/model/schema/session.schema";
+import * as tUser from "@/model/schema/user.schema";
 
 //----------------------------------------------------------------------------
 // Query to create `users` table

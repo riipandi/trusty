@@ -1,5 +1,5 @@
-import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
 import { WithTimeStampSchema } from "@/model/client";
+import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
 
 export const TABLE_NAME = "users";
 

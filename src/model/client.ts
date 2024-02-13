@@ -2,9 +2,9 @@ import { Client as LibSQLClient, createClient } from "@libsql/client";
 import { LibsqlDialect } from "@libsql/kysely-libsql";
 import { ColumnType, Kysely } from "kysely";
 
+import { PasswordTable } from "@/model/schema/password.schema";
 import { SessionTable } from "@/model/schema/session.schema";
 import { UserTable } from "@/model/schema/user.schema";
-import { PasswordTable } from "@/model/schema/password.schema";
 
 import env from "@/config";
 
