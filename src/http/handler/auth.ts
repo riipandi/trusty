@@ -1,9 +1,10 @@
+import { consola } from "consola";
 import { Context } from "hono";
 import * as Jwt from "hono/jwt";
 import { typeid } from "typeid-js";
 
 import { JwtPayload } from "@/binding";
-import { jsonResponse } from "@/http/response";
+import { jsonResponse, throwResponse } from "@/http/response";
 import type { LoginRequest } from "@/http/validator/auth";
 
 export async function login(c: Context) {
@@ -28,4 +29,15 @@ export async function login(c: Context) {
   const access_token = await Jwt.sign(payload, jwtSecret, "HS256");
 
   return jsonResponse(c, undefined, { access_token });
+}
+
+export async function whoami(c: Context) {
+  const jwtPayload = c.get("jwtPayload") as JwtPayload;
+  console.info("jwtPayload", jwtPayload);
+
+  if (!jwtPayload) {
+    return throwResponse(c, 201, "No data");
+  }
+
+  return jsonResponse(c, undefined, jwtPayload);
 }

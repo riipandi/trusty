@@ -6,9 +6,6 @@ CREATE TABLE IF NOT EXISTS users (
     aud TEXT,
     role TEXT,
     email TEXT,
-    raw_app_meta_data JSON,
-    raw_user_meta_data JSON,
-    encrypted_password TEXT,
     email_change_token_new TEXT,
     email_change TEXT,
     email_change_token_current TEXT DEFAULT '',
@@ -16,6 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
     phone TEXT DEFAULT NULL,
     phone_change TEXT DEFAULT '',
     phone_change_token TEXT DEFAULT '',
+    raw_app_meta_data JSON,
+    raw_user_meta_data JSON,
     confirmation_token TEXT,
     recovery_token TEXT,
     reauthentication_token TEXT DEFAULT '',
@@ -45,6 +44,17 @@ CREATE UNIQUE INDEX email_change_token_new_idx ON users (email_change_token_new)
 CREATE UNIQUE INDEX reauthentication_token_idx ON users (reauthentication_token) WHERE reauthentication_token NOT LIKE '^[0-9 ]*$';
 CREATE UNIQUE INDEX recovery_token_idx ON users (recovery_token) WHERE recovery_token NOT LIKE '^[0-9 ]*$';
 CREATE UNIQUE INDEX users_email_partial_key ON users (email) WHERE is_sso_user = 0;
+
+-- -----------------------------------------------------------------------------
+-- Query to create `passwords` table
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS passwords (
+    user_id UUID NOT NULL,
+    encrypted_password TEXT NOT NULL,
+    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    updated_at INTEGER,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE NO ACTION
+);
 
 -- -----------------------------------------------------------------------------
 -- Query to create `sessions` table

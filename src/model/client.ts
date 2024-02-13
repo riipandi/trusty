@@ -1,4 +1,4 @@
-import { createClient } from "@libsql/client";
+import { Client as LibSQLClient, createClient } from "@libsql/client";
 import { LibsqlDialect } from "@libsql/kysely-libsql";
 import { ColumnType, Kysely } from "kysely";
 
@@ -31,7 +31,7 @@ export interface WithSoftDeleteSchema {
   deleted_at: ColumnType<Date, number | undefined, never>;
 }
 
-export const db = new Kysely<Database>({
+export const db: Kysely<Database> = new Kysely<Database>({
   dialect: new LibsqlDialect({
     url: env.LIBSQL_CLIENT_URL,
     authToken: env.LIBSQL_CLIENT_TOKEN,
@@ -39,9 +39,11 @@ export const db = new Kysely<Database>({
   log: env.NODE_ENV === "development" ? ["error", "query"] : ["error"],
 });
 
-export const sqlc = createClient({
+export const sqlc: LibSQLClient = createClient({
   url: env.LIBSQL_CLIENT_URL,
   authToken: env.LIBSQL_CLIENT_TOKEN,
   // @ref: https://github.com/tursodatabase/libsql-client-ts/blob/main/packages/libsql-client/examples/sync.js
   // syncUrl: env.LIBSQL_CLIENT_URL, // Sync mode
 });
+
+export type DB = Kysely<Database>;

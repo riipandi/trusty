@@ -9,28 +9,53 @@ const REFRESH_TOKENS_TABLE = "refresh_tokens";
 const IDENTITIES_TABLE = "identities";
 const AUDIT_LOG_TABLE = "audit_log";
 
-export async function up(db: Kysely<Database>): Promise<void> {
+export async function up({ schema }: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   // Query to create `users` table
   //----------------------------------------------------------------------------
-  await db.schema
+  await schema
     .createTable(USERS_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
+    .addColumn("aud", "text")
+    .addColumn("role", "text")
     .addColumn("email", "text", (col) => col.notNull().unique())
-    .addColumn("first_name", "text", (col) => col.notNull())
-    .addColumn("last_name", "text", (col) => col.notNull())
+    .addColumn("email_change_token_new", "text")
+    .addColumn("email_change", "text")
+    .addColumn("email_change_token_current", "text", (col) => col.defaultTo(""))
+    .addColumn("email_change_confirm_status", "integer", (col) => col.notNull().defaultTo(0))
+    .addColumn("phone", "text", (col) => col.unique())
+    .addColumn("phone_change", "text", (col) => col.defaultTo(""))
+    .addColumn("phone_change_token", "text", (col) => col.defaultTo(""))
+    .addColumn("raw_app_meta_data", "jsonb")
+    .addColumn("raw_user_meta_data", "json")
+    .addColumn("confirmation_token", "text")
+    .addColumn("recovery_token", "text")
+    .addColumn("reauthentication_token", "text", (col) => col.defaultTo(""))
+    .addColumn("is_super_admin", "integer", (col) => col.notNull().defaultTo(false))
+    .addColumn("is_sso_user", "integer", (col) => col.notNull().defaultTo(false))
+    .addColumn("last_sign_in_at", "integer")
+    .addColumn("banned_until", "integer")
+    .addColumn("invited_at", "integer")
+    .addColumn("email_confirmed_at", "integer")
+    .addColumn("email_change_sent_at", "integer")
+    .addColumn("phone_confirmed_at", "integer")
+    .addColumn("phone_change_sent_at", "integer")
+    .addColumn("confirmation_sent_at", "integer")
+    .addColumn("recovery_sent_at", "integer")
+    .addColumn("reauthentication_sent_at", "integer")
+    .addColumn("confirmed_at", "integer")
     .$call(TIMESTAMPS_COLUMN)
     .execute();
 
-  await db.schema.createIndex("users_email_index").on(USERS_TABLE).column("email").execute();
+  await schema.createIndex("users_email_index").on(USERS_TABLE).column("email").execute();
 
   //----------------------------------------------------------------------------
   // Query to create `passwords` table
   //----------------------------------------------------------------------------
-  await db.schema
+  await schema
     .createTable(PASSWORDS_TABLE)
     .addColumn("user_id", "text", (col) =>
-      col.references("users.id").onDelete("no action").notNull().unique(),
+      col.primaryKey().references("users.id").onDelete("no action"),
     )
     .addColumn("encrypted_password", "text", (col) => col.notNull())
     .$call(TIMESTAMPS_COLUMN)
@@ -39,7 +64,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   // Query to create `sessions` table
   //----------------------------------------------------------------------------
-  await db.schema
+  await schema
     .createTable(SESSIONS_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .addColumn("user_id", "text", (col) => col.references("users.id").onDelete("cascade").notNull())
@@ -50,7 +75,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   // Query to create `refresh_tokens` table
   //----------------------------------------------------------------------------
-  await db.schema
+  await schema
     .createTable(REFRESH_TOKENS_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
@@ -59,7 +84,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   // Query to create `identities` table
   //----------------------------------------------------------------------------
-  await db.schema
+  await schema
     .createTable(IDENTITIES_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
@@ -68,18 +93,18 @@ export async function up(db: Kysely<Database>): Promise<void> {
   //----------------------------------------------------------------------------
   // Query to create `audit_log` table
   //----------------------------------------------------------------------------
-  await db.schema
+  await schema
     .createTable(AUDIT_LOG_TABLE)
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
     .execute();
 }
 
-export async function down(db: Kysely<Database>): Promise<void> {
-  await db.schema.dropTable(AUDIT_LOG_TABLE).execute();
-  await db.schema.dropTable(IDENTITIES_TABLE).execute();
-  await db.schema.dropTable(REFRESH_TOKENS_TABLE).execute();
-  await db.schema.dropTable(SESSIONS_TABLE).execute();
-  await db.schema.dropTable(PASSWORDS_TABLE).execute();
-  await db.schema.dropTable(USERS_TABLE).execute();
+export async function down({ schema }: Kysely<Database>): Promise<void> {
+  await schema.dropTable(AUDIT_LOG_TABLE).execute();
+  await schema.dropTable(IDENTITIES_TABLE).execute();
+  await schema.dropTable(REFRESH_TOKENS_TABLE).execute();
+  await schema.dropTable(SESSIONS_TABLE).execute();
+  await schema.dropTable(PASSWORDS_TABLE).execute();
+  await schema.dropTable(USERS_TABLE).execute();
 }

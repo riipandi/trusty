@@ -4,7 +4,7 @@ const env = process.env;
 
 const envars = {
   NODE_ENV: env.NODE_ENV || "production",
-  HOSTNAME: env.HOSTNAME || "localhost",
+  HOSTNAME: env.HOSTNAME || "127.0.0.1",
   PORT: parseInt(env.PORT as string) || 8030,
   APP_BASE_URL: env.APP_BASE_URL as string,
   APP_SECRET_KEY: env.APP_SECRET_KEY as string,

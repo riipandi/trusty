@@ -1,16 +1,12 @@
-import { JwtPayload } from "@/binding";
-import { jsonResponse, throwResponse } from "@/http/response";
-import { db } from "@/model/client";
-import { consola } from "consola";
 import { Context } from "hono";
+import { db } from "@/model/client";
+import { jsonResponse, throwResponse } from "@/http/response";
+import * as userRepo from "@/model/repository/user.repo";
 
 export async function getUsers(c: Context) {
-  const jwtPayload = c.get("jwtPayload") as JwtPayload;
-  consola.info("jwtPayload", jwtPayload);
+  const users = await userRepo.findAllUsers(db);
 
-  const users = await db.selectFrom("users").selectAll().execute();
-
-  if (users.length === 0) {
+  if (!users) {
     return throwResponse(c, 201, "No data");
   }
 
@@ -19,7 +15,7 @@ export async function getUsers(c: Context) {
 
 export async function getUserById(c: Context) {
   const id = c.req.param("id");
-  const user = await db.selectFrom("users").where("id", "=", id).selectAll().executeTakeFirst();
+  const user = await userRepo.findUserById(db, id);
 
   if (!user) {
     return throwResponse(c, 201, "No user found");

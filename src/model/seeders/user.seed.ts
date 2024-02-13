@@ -11,14 +11,14 @@ export async function userSeeder(db: Kysely<Database>) {
     {
       id: typeid(prefix).toString(),
       email: "admin@example.com",
-      first_name: "Admin",
-      last_name: "Sistem",
+      is_super_admin: false,
+      is_sso_user: false,
     },
     {
       id: typeid(prefix).toString(),
       email: "john@example.com",
-      first_name: "John",
-      last_name: "Doe",
+      is_super_admin: false,
+      is_sso_user: false,
     },
   ];
 

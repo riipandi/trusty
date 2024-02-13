@@ -64,7 +64,7 @@ echo $GH_TOKEN | docker login ghcr.io --username CHANGEME --password-stdin
 ### Running Docker Image
 
 ```sh
-docker run --rm -it --name trusty --env-file .env.docker -p 8030:8030 ghcr.io/riipandi/trusty:edge
+docker run --rm -it --name trusty --env-file .env -p 8030:8030 ghcr.io/riipandi/trusty:edge
 ```
 
 ### Simple Load Testing

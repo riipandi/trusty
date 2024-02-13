@@ -1,4 +1,3 @@
-import { vValidator } from "@hono/valibot-validator";
 import { Context } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { StatusCode } from "hono/utils/http-status";
