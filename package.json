@@ -1,6 +1,6 @@
 {
     "name": "trusty",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "private": true,
     "type": "module",
     "config": {
@@ -47,6 +47,7 @@
         "@libsql/client": "^0.4.3",
         "@libsql/kysely-libsql": "^0.3.0",
         "consola": "^3.2.3",
+        "dotenv": "^16.4.3",
         "fs-extra": "^11.2.0",
         "hono": "^4.0.1",
         "kysely": "^0.27.2",

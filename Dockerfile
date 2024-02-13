@@ -50,13 +50,15 @@ WORKDIR /srv
 RUN addgroup --system --gid 1001 nonroot && adduser --system --uid 1001 nonroot
 RUN corepack enable && corepack prepare pnpm@latest-8 --activate
 
-ARG DATABASE_URL
 ARG APP_BASE_URL
 ARG APP_SECRET_KEY
+ARG LIBSQL_CLIENT_URL
+ARG LIBSQL_CLIENT_TOKEN
 
-ENV DATABASE_URL $DATABASE_URL
 ENV APP_BASE_URL $APP_BASE_URL
 ENV APP_SECRET_KEY $APP_SECRET_KEY
+ENV LIBSQL_CLIENT_URL $LIBSQL_CLIENT_URL
+ENV LIBSQL_CLIENT_TOKEN $LIBSQL_CLIENT_TOKEN
 
 # Copy built files, spawns command as a child process.
 COPY --from=installer --chown=nonroot:nonroot /pnpm /pnpm

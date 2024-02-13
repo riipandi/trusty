@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { serve } from "@hono/node-server";
 import { consola } from "consola";
 import { Hono } from "hono";
@@ -13,8 +14,8 @@ import * as handler from "@/http/handler/root";
 import { onErrorResponse, throwResponse } from "@/http/response";
 import apiRoutes from "@/routes/api";
 
-const hostname = process.env.HOSTNAME || "localhost";
-const port = process.env.PORT || 8030;
+import env from "@/config";
+
 const app = new Hono();
 
 // Global middlewares
@@ -56,6 +57,10 @@ middleware.use("*", async (c, next) => {
 app.route("/api", middleware);
 app.route("/api", apiRoutes);
 
-consola.info(`Server is listening on http://${hostname}:${port}`);
+consola.info(`Server is listening on http://${env.HOSTNAME}:${env.PORT}`);
 
-serve({ fetch: app.fetch, hostname, port });
+serve({
+  fetch: app.fetch,
+  hostname: env.HOSTNAME,
+  port: env.PORT,
+});

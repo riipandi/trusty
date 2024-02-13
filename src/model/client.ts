@@ -5,6 +5,8 @@ import { ColumnType, Kysely } from "kysely";
 import { SessionTable } from "@/model/schema/session.schema";
 import { PasswordTable, UserTable } from "@/model/schema/user.schema";
 
+import env from "@/config";
+
 /**
  * For Kysely's type-safety and autocompletion to work, it needs to know
  * your database structure. This requires a TypeScript Database interface,
@@ -29,12 +31,15 @@ export interface WithSoftDeleteSchema {
   deleted_at: ColumnType<Date, number | undefined, never>;
 }
 
-const url = process.env.LIBSQL_URL || "libsql://localhost:8080?tls=0";
-const authToken = process.env.LIBSQL_TOKEN || "";
-
 export const db = new Kysely<Database>({
-  dialect: new LibsqlDialect({ url, authToken }),
-  log: process.env.NODE_ENV === "development" ? ["error", "query"] : ["error"],
+  dialect: new LibsqlDialect({
+    url: env.LIBSQL_CLIENT_URL,
+    authToken: env.LIBSQL_CLIENT_TOKEN,
+  }),
+  log: env.NODE_ENV === "development" ? ["error", "query"] : ["error"],
 });
 
-export const libsqlClient = createClient({ url, authToken });
+export const libsqlClient = createClient({
+  url: env.LIBSQL_CLIENT_URL,
+  authToken: env.LIBSQL_CLIENT_TOKEN,
+});
