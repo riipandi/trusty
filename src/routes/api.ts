@@ -8,8 +8,8 @@ import { jwtMiddleware } from "@/http/middleware/jwt";
 import { validateJsonRequest } from "@/http/request";
 import { LoginRequestSchema } from "@/http/validator/auth";
 
-import { apiRootHandler, healthCheckHandler } from "@/http/handler/root";
 import * as authHandler from "@/http/handler/auth";
+import { apiRootHandler, healthCheckHandler } from "@/http/handler/root";
 import * as userHandler from "@/http/handler/user";
 
 const corsMiddleware = cors({
