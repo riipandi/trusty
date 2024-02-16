@@ -28,7 +28,7 @@ export async function login(c: Context) {
 
   const access_token = await Jwt.sign(payload, jwtSecret, "HS256");
 
-  return jsonResponse(c, undefined, { access_token });
+  return jsonResponse(c, "Issues access and refresh tokens based on grant type", { access_token });
 }
 
 export async function whoami(c: Context) {
@@ -45,5 +45,5 @@ export async function whoami(c: Context) {
     jwt: jwtPayload,
   };
 
-  return jsonResponse(c, undefined, payload);
+  return jsonResponse(c, "Fetch the latest user account information", payload);
 }

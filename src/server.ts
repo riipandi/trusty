@@ -1,12 +1,12 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { csrf } from "hono/csrf";
+import { showRoutes } from "hono/dev";
 import { etag } from "hono/etag";
 
 import { logger } from "@/http/middleware/logger";
 import { onErrorResponse, throwResponse } from "@/http/response";
 
-import adminRoutes from "@/routes/admin";
 import apiRoutes from "@/routes/api";
 import webRoutes from "@/routes/web";
 
@@ -35,7 +35,8 @@ app.onError(onErrorResponse);
 // Register API routes
 app.route("/api", apiRoutes);
 app.route("/ui", webRoutes);
-app.route("/admin", adminRoutes);
+
+showRoutes(app);
 
 serve(
   {

@@ -34,6 +34,16 @@ body:json {
   }
 }
 
+vars:post-response {
+  ACCESS_TOKEN: res.body.access_token
+}
+
+assert {
+  res.status: eq 200
+  res.body.access_token: isDefined string
+  res.body.access_token: isString string
+}
+
 docs {
   Issues access and refresh tokens based on grant type
 }

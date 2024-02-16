@@ -7,7 +7,11 @@ meta {
 put {
   url: {{BASE_URL}}/admin/users/:userId/factors/:factorId
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{ACCESS_TOKEN}}
 }
 
 body:json {

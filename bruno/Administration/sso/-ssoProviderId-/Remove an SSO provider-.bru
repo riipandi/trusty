@@ -7,5 +7,9 @@ meta {
 delete {
   url: {{BASE_URL}}/admin/sso/providers/:ssoProviderId
   body: none
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{ACCESS_TOKEN}}
 }

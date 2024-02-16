@@ -7,5 +7,9 @@ meta {
 get {
   url: {{BASE_URL}}/admin/sso/providers
   body: none
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{ACCESS_TOKEN}}
 }

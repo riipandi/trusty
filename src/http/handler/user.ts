@@ -10,7 +10,7 @@ export async function getUsers(c: Context) {
     return throwResponse(c, 201, "No data");
   }
 
-  return jsonResponse(c, undefined, { data: users });
+  return jsonResponse(c, "Fetch a listing of users", { data: users });
 }
 
 export async function getUserById(c: Context) {
@@ -21,5 +21,5 @@ export async function getUserById(c: Context) {
     return throwResponse(c, 201, "No user found");
   }
 
-  return jsonResponse(c, undefined, { data: user });
+  return jsonResponse(c, "Fetch user account data for a user", { data: user });
 }
