@@ -21,10 +21,10 @@ console_command = "/bin/sh"
   # release_command = "/usr/local/bin/node dist/migrate.cjs migrate"
 
 [env]
-  BIND_ADDR = "0.0.0.0:8030"
+  BIND_ADDR = "0.0.0.0:3080"
 
 [http_service]
-  internal_port = 8030
+  internal_port = 3080
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true

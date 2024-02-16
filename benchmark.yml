@@ -1,6 +1,6 @@
 ---
 
-base: 'http://localhost:8030'
+base: 'http://localhost:3080'
 iterations: '{{ I }}'
 concurrency: '{{ C }}'
 

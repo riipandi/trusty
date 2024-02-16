@@ -15,7 +15,7 @@
         "db:seed": "tsx src/migrate.ts seed",
         "db:generate": "tsx src/migrate.ts generate-sql",
         "docker:build": "docker build -f Dockerfile . -t $npm_package_config_image:latest -t $npm_package_config_image:$npm_package_version",
-        "docker:run": "docker run --rm -it -p 8030:8030 --env-file .env --name $npm_package_name $npm_package_config_image:latest",
+        "docker:run": "docker run --rm -it -p 3080:3080 --env-file .env --name $npm_package_name $npm_package_config_image:latest",
         "docker:push": "docker push $npm_package_config_image:latest && docker push $npm_package_config_image:$npm_package_version",
         "generate-key": "openssl rand -base64 500 | tr -dc 'a-zA-Z0-9' | fold -w 40 | head -n 1",
         "cleanup": "docker compose down --remove-orphans && rimraf build public/build",

@@ -69,8 +69,8 @@ USER nonroot:nonroot
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 ENV HOSTNAME 0.0.0.0
-ENV PORT 8030
-EXPOSE 8030
+ENV PORT 3080
+EXPOSE 3080
 
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/usr/local/bin/node", "dist/server.cjs"]

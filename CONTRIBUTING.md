@@ -49,7 +49,7 @@ pnpm generate-key
 4. Run database seeder: `pnpm db:seed`
 5. Start development: `pnpm dev`
 
-Application will run at `http://localhost:8030`
+Application will run at `http://localhost:3080`
 
 ## 🧑🏻‍💻 Development
 
@@ -64,7 +64,7 @@ echo $GH_TOKEN | docker login ghcr.io --username CHANGEME --password-stdin
 ### Running Docker Image
 
 ```sh
-docker run --rm -it --name trusty --env-file .env -p 8030:8030 ghcr.io/riipandi/trusty:edge
+docker run --rm -it --name trusty --env-file .env -p 3080:3080 ghcr.io/riipandi/trusty:edge
 ```
 
 ### Simple Load Testing
@@ -72,7 +72,7 @@ docker run --rm -it --name trusty --env-file .env -p 8030:8030 ghcr.io/riipandi/
 Using [`hey`](https://github.com/rakyll/hey) to perform a load testing:
 
 ```sh
-hey -n 1000 -c 200 -z 30s -m GET -T "application/json" https://localhost:8030/api/health
+hey -n 1000 -c 200 -z 30s -m GET -T "application/json" https://localhost:3080/api/health
 ```
 
 Using [`drill`](https://github.com/fcsonline/drill) to perform a load testing:
@@ -84,10 +84,10 @@ I=1000 C=10 drill -s --benchmark benchmark.yml --tags post_auth
 Using [`vegeta`](https://github.com/tsenart/vegeta) to perform a load testing:
 
 ```sh
-echo "GET http://localhost:8030/api" | vegeta attack -duration=5s | tee benchmark-results.bin | vegeta report
+echo "GET http://localhost:3080/api" | vegeta attack -duration=5s | tee benchmark-results.bin | vegeta report
 
 # With authentication
-echo "GET http://localhost:8030/api/users" | \
+echo "GET http://localhost:3080/api/users" | \
  vegeta attack -duration=5s -header "Authorization: Token ${JWT_TOKEN}" | \
  tee benchmark-results.bin | vegeta report
 ```
