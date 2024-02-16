@@ -1,5 +1,5 @@
 import type { KyselyDatabase } from "@/model/client";
-import { User } from "@/model/schema/user.schema";
+import { User } from "@/model/schema/user";
 
 export async function findAllUsers(db: KyselyDatabase): Promise<User[] | null> {
   const users = await db.selectFrom("users").selectAll().execute();

@@ -1,9 +1,9 @@
-import { WithTimeStampSchema } from "@/model/client";
+import { WithSoftDeleteSchema, WithTimeStampSchema } from "@/model/client";
 import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
 
 export const TABLE_NAME = "users";
 
-export interface UserTable extends WithTimeStampSchema {
+export interface UserTable extends WithTimeStampSchema, WithSoftDeleteSchema {
   id: Generated<string>;
   aud?: string | null;
   role?: string | null;

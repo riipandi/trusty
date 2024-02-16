@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { html, raw } from "hono/html";
 
-import { Bindings } from "@/binding";
+import { Bindings } from "@/global";
 
 const route = new Hono<{ Bindings: Bindings }>();
 

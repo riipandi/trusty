@@ -3,7 +3,7 @@ import { Context } from "hono";
 import * as Jwt from "hono/jwt";
 import { typeid } from "typeid-js";
 
-import { JwtPayload } from "@/binding";
+import { JwtPayload } from "@/global";
 import { jsonResponse, throwResponse } from "@/http/response";
 import type { LoginRequest } from "@/http/validator/auth";
 

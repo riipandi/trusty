@@ -1,13 +1,14 @@
+import { sql } from "kysely";
 import type { KyselyDatabase } from "@/model/client";
-import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN, TIMESTAMP_MS } from "@/model/extends";
+import { PRIMARY_KEY_COLUMN, PRIMARY_KEY_SERIAL_COLUMN, TIMESTAMPS_COLUMN } from "@/model/extends";
 import { type TableIndexBuilder, createIndex } from "@/model/extends";
 
-import * as tAuditLog from "@/model/schema/audit_log.schema";
-import * as tIdentities from "@/model/schema/identities.schema";
-import * as tPassword from "@/model/schema/password.schema";
-import * as tRefreshToken from "@/model/schema/refresh_token.schema";
-import * as tSession from "@/model/schema/session.schema";
-import * as tUser from "@/model/schema/user.schema";
+import * as tAuditLog from "@/model/schema/audit_log";
+import * as tIdentities from "@/model/schema/identities";
+import * as tPassword from "@/model/schema/password";
+import * as tRefreshToken from "@/model/schema/refresh_token";
+import * as tSession from "@/model/schema/session";
+import * as tUser from "@/model/schema/user";
 
 //----------------------------------------------------------------------------
 // Query to create `users` table
@@ -31,8 +32,8 @@ export const UserMigrationQuery = (db: KyselyDatabase) =>
     .addColumn("confirmation_token", "text")
     .addColumn("recovery_token", "text")
     .addColumn("reauthentication_token", "text")
-    .addColumn("is_super_admin", "integer", (col) => col.notNull().defaultTo(false))
-    .addColumn("is_sso_user", "integer", (col) => col.notNull().defaultTo(false))
+    .addColumn("is_super_admin", "integer", (col) => col.notNull().defaultTo(0))
+    .addColumn("is_sso_user", "integer", (col) => col.notNull().defaultTo(0))
     .addColumn("last_sign_in_at", "integer")
     .addColumn("banned_until", "integer")
     .addColumn("invited_at", "integer")
@@ -48,16 +49,8 @@ export const UserMigrationQuery = (db: KyselyDatabase) =>
     .ifNotExists();
 
 export const UserTableIndexes: TableIndexBuilder[] = [
-  {
-    kind: "normal",
-    name: "users_email_idx",
-    column: "email",
-  },
-  {
-    kind: "normal",
-    name: "users_phone_idx",
-    column: "phone",
-  },
+  { kind: "normal", name: "users_email_idx", column: "email" },
+  { kind: "normal", name: "users_phone_idx", column: "phone" },
   {
     kind: "unique",
     name: "confirmation_token_idx",
@@ -110,8 +103,6 @@ export const PasswordMigrationQuery = (db: KyselyDatabase) =>
     .$call(TIMESTAMPS_COLUMN)
     .ifNotExists();
 
-export const PasswordTableIndexes: TableIndexBuilder[] = [];
-
 //----------------------------------------------------------------------------
 // Query to create `sessions` table
 //----------------------------------------------------------------------------
@@ -119,9 +110,20 @@ export const SessionMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tSession.TABLE_NAME)
     .$call(PRIMARY_KEY_COLUMN)
-    .addColumn("user_id", "text", (col) => col.references("users.id").onDelete("cascade").notNull())
-    .addColumn("expires_at", "integer", (col) => col.notNull())
-    .addColumn("created_at", "integer", (col) => col.defaultTo(TIMESTAMP_MS).notNull())
+    .addColumn("user_id", "integer", (col) =>
+      col.references("users.id").onDelete("cascade").notNull(),
+    )
+    .addColumn("factor_id", "integer", (col) =>
+      col.references("factors.id").onDelete("cascade").notNull(),
+    )
+    .addColumn("aal", "text", (c) => c.notNull().defaultTo("aal1"))
+    .addColumn("not_after", "integer")
+    .addColumn("user_agent", "text")
+    .addColumn("ip", "text")
+    .addColumn("tag", "text")
+    .addColumn("refreshed_at", "integer")
+    .$call(TIMESTAMPS_COLUMN)
+    .addCheckConstraint("sessions_aal_check", sql`aal IN ('aal1','aal2','aal3')`)
     .ifNotExists();
 
 export const SessionsTableIndexes: TableIndexBuilder[] = [];
@@ -132,7 +134,16 @@ export const SessionsTableIndexes: TableIndexBuilder[] = [];
 export const RefreshTokenMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tRefreshToken.TABLE_NAME)
-    .$call(PRIMARY_KEY_COLUMN)
+    .$call(PRIMARY_KEY_SERIAL_COLUMN)
+    .addColumn("session_id", "integer", (col) =>
+      col.references("sessions.id").onDelete("cascade").notNull(),
+    )
+    .addColumn("user_id", "integer", (col) =>
+      col.references("users.id").onDelete("cascade").notNull(),
+    )
+    .addColumn("token", "text")
+    .addColumn("revoked", "integer", (col) => col.defaultTo(0).notNull())
+    .addColumn("parent", "text")
     .$call(TIMESTAMPS_COLUMN)
     .ifNotExists();
 
@@ -145,6 +156,12 @@ export const IdentityMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tIdentities.TABLE_NAME)
     .$call(PRIMARY_KEY_COLUMN)
+    // provider_id TEXT NOT NULL,
+    // user_id TEXT NOT NULL,
+    // email TEXT,
+    // identity_data JSON NOT NULL,
+    // provider TEXT NOT NULL,
+    // last_sign_in_at INTEGER,
     .$call(TIMESTAMPS_COLUMN)
     .ifNotExists();
 
@@ -157,41 +174,41 @@ export const AuditLogMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tAuditLog.TABLE_NAME)
     .$call(PRIMARY_KEY_COLUMN)
-    .$call(TIMESTAMPS_COLUMN)
+    // id TEXT PRIMARY KEY NOT NULL,
+    // payload JSON,
+    // ip_address TEXT DEFAULT '',
+    // .addColumn("created_at", "integer", (col) => col.defaultTo(TIMESTAMP_MS).notNull())
     .ifNotExists();
 
 export const AuditLogTableIndexes: TableIndexBuilder[] = [];
 
 export async function up(db: KyselyDatabase): Promise<void> {
-  // Run `users` table migration
+  // Run create tables migration
   await UserMigrationQuery(db).execute();
-  await Promise.all(UserTableIndexes.map((index) => createIndex(db, tUser.TABLE_NAME, index)));
-
-  // Run `passwords` table migration
   await PasswordMigrationQuery(db).execute();
-
-  // Run `sessions` table migration
   await SessionMigrationQuery(db).execute();
-
-  // Run `refresh_tokens` table migration
   await RefreshTokenMigrationQuery(db).execute();
-
-  // Run `identities` table migration
   await IdentityMigrationQuery(db).execute();
-
-  // Run `audit_log` table migration
   await AuditLogMigrationQuery(db).execute();
+
+  // Run create indexes
+  await Promise.all([
+    UserTableIndexes.map((index) => createIndex(db, tUser.TABLE_NAME, index)),
+    SessionsTableIndexes.map((index) => createIndex(db, tSession.TABLE_NAME, index)),
+    RefreshTokenTableIndexes.map((index) => createIndex(db, tRefreshToken.TABLE_NAME, index)),
+    IdentitiesTableIndexes.map((index) => createIndex(db, tIdentities.TABLE_NAME, index)),
+    AuditLogTableIndexes.map((index) => createIndex(db, tAuditLog.TABLE_NAME, index)),
+  ]);
 }
 
 export async function down({ schema }: KyselyDatabase): Promise<void> {
-  await Promise.all(
-    // tAuditLog.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
-    // tIdentities.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
-    // tRefreshToken.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
-    // tSession.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
-    // tPassword.TABLE_INDEXES.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+  await Promise.all([
+    AuditLogTableIndexes.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+    IdentitiesTableIndexes.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+    RefreshTokenTableIndexes.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
+    SessionsTableIndexes.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
     UserTableIndexes.map(({ name }) => schema.dropIndex(name).ifExists().execute()),
-  );
+  ]);
   await schema.dropTable(tAuditLog.TABLE_NAME).ifExists().execute();
   await schema.dropTable(tIdentities.TABLE_NAME).ifExists().execute();
   await schema.dropTable(tRefreshToken.TABLE_NAME).ifExists().execute();

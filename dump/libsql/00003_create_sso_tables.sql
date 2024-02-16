@@ -2,8 +2,8 @@
 -- Query to create `flow_state` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS flow_state (
-    id UUID PRIMARY KEY NOT NULL,
-    user_id UUID,
+    id TEXT PRIMARY KEY NOT NULL,
+    user_id TEXT,
     auth_code TEXT NOT NULL,
     code_challenge_method TEXT CHECK ( code_challenge_method IN ('s256','plain') ) NOT NULL DEFAULT 'plain', -- ENUM code_challenge_method
     code_challenge TEXT NOT NULL,
@@ -24,7 +24,7 @@ CREATE INDEX IF NOT EXISTS idx_user_id_auth_method ON flow_state (user_id, authe
 -- Query to create `sso_providers` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS sso_providers (
-    id UUID PRIMARY KEY NOT NULL,
+    id TEXT PRIMARY KEY NOT NULL,
     resource_id TEXT,
     created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
     updated_at INTEGER,
@@ -37,8 +37,8 @@ CREATE UNIQUE INDEX sso_providers_resource_id_idx ON sso_providers (lower(resour
 -- Query to create `sso_domains` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS sso_domains (
-    id UUID PRIMARY KEY NOT NULL,
-    sso_provider_id UUID NOT NULL,
+    id TEXT PRIMARY KEY NOT NULL,
+    sso_provider_id TEXT NOT NULL,
     domain TEXT NOT NULL,
     created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
     updated_at INTEGER,
@@ -53,8 +53,8 @@ CREATE INDEX IF NOT EXISTS sso_domains_sso_provider_id_idx ON sso_domains (sso_p
 -- Query to create `saml_providers` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS saml_providers (
-    id UUID PRIMARY KEY NOT NULL,
-    sso_provider_id UUID NOT NULL,
+    id TEXT PRIMARY KEY NOT NULL,
+    sso_provider_id TEXT NOT NULL,
     entity_id TEXT NOT NULL,
     metadata_xml TEXT NOT NULL,
     metadata_url TEXT,
@@ -74,9 +74,9 @@ CREATE INDEX IF NOT EXISTS saml_providers_sso_provider_id_idx ON saml_providers 
 -- Query to create `saml_relay_states` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS saml_relay_states (
-    id UUID PRIMARY KEY NOT NULL,
-    sso_provider_id UUID NOT NULL,
-    flow_state_id UUID,
+    id TEXT PRIMARY KEY NOT NULL,
+    sso_provider_id TEXT NOT NULL,
+    flow_state_id TEXT,
     request_id TEXT NOT NULL,
     for_email TEXT,
     redirect_to TEXT,

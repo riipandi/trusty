@@ -2,7 +2,7 @@
 -- Query to create `users` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS users (
-    id UUID PRIMARY KEY NOT NULL,
+    id TEXT PRIMARY KEY NOT NULL,
     aud TEXT,
     role TEXT,
     email TEXT,
@@ -49,7 +49,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS users_email_partial_key ON users (email) WHERE
 -- Query to create `passwords` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS passwords (
-    user_id UUID NOT NULL,
+    user_id TEXT NOT NULL,
     encrypted_password TEXT NOT NULL,
     created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
     updated_at INTEGER,
@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS passwords (
 -- Query to create `sessions` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS sessions (
-    id UUID PRIMARY KEY NOT NULL,
-    user_id UUID NOT NULL,
-    factor_id UUID,
+    id TEXT PRIMARY KEY NOT NULL,
+    user_id TEXT NOT NULL,
+    factor_id TEXT,
     aal TEXT CHECK ( aal IN ('aal1','aal2','aal3') ) NOT NULL DEFAULT 'aal1', -- ENUM all_level
     not_after INTEGER,
     user_agent TEXT,
@@ -73,7 +73,6 @@ CREATE TABLE IF NOT EXISTS sessions (
     updated_at INTEGER,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (factor_id) REFERENCES mfa_factors (id) ON DELETE CASCADE
-
 );
 
 CREATE INDEX IF NOT EXISTS sessions_not_after_idx ON sessions (not_after DESC);
@@ -85,8 +84,8 @@ CREATE INDEX IF NOT EXISTS user_id_created_at_idx ON sessions (user_id, created_
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS refresh_tokens (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id UUID,
-    user_id UUID,
+    session_id TEXT,
+    user_id TEXT,
     token TEXT,
     revoked INTEGER NOT NULL DEFAULT 0, -- BOOLEAN
     parent TEXT,
@@ -105,9 +104,9 @@ CREATE INDEX IF NOT EXISTS refresh_tokens_updated_at_idx ON refresh_tokens (upda
 -- Query to create `identities` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS identities (
-    id UUID PRIMARY KEY NOT NULL,
+    id TEXT PRIMARY KEY NOT NULL,
     provider_id TEXT NOT NULL,
-    user_id UUID NOT NULL,
+    user_id TEXT NOT NULL,
     email TEXT,
     identity_data JSON NOT NULL,
     provider TEXT NOT NULL,
@@ -125,7 +124,7 @@ CREATE INDEX IF NOT EXISTS identities_user_id_idx ON identities (user_id);
 -- Query to create `audit_log` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS audit_log (
-    id UUID PRIMARY KEY NOT NULL,
+    id TEXT PRIMARY KEY NOT NULL,
     payload JSON,
     ip_address TEXT DEFAULT '',
     created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now'))

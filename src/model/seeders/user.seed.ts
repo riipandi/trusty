@@ -2,7 +2,7 @@ import { Scrypt } from "oslo/password";
 import { typeid } from "typeid-js";
 
 import { type KyselyDatabase } from "@/model/client";
-import { InsertUser } from "@/model/schema/user.schema";
+import { InsertUser } from "@/model/schema/user";
 
 export async function userSeeder(db: KyselyDatabase) {
   try {
