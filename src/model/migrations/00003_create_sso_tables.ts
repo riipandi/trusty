@@ -2,10 +2,10 @@ import type { KyselyDatabase } from "@/model/client";
 import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN } from "@/model/extends";
 
 import * as tFlowState from "@/model/schema/flow_state";
-import * as tSSOProvider from "@/model/schema/sso_provider";
-import * as tSSODomain from "@/model/schema/sso_domain";
 import * as tSamlProvider from "@/model/schema/saml_provider";
 import * as tSamlRelayState from "@/model/schema/saml_relay_state";
+import * as tSSODomain from "@/model/schema/sso_domain";
+import * as tSSOProvider from "@/model/schema/sso_provider";
 
 export async function up(db: KyselyDatabase): Promise<void> {
   //----------------------------------------------------------------------------

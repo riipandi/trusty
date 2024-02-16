@@ -7,9 +7,9 @@ import {
   createIndex,
 } from "@/model/extends";
 
-import * as tMfaFactor from "@/model/schema/mfa_factor";
-import * as tMfaChallenge from "@/model/schema/mfa_challenge";
 import * as tMfaAmrClaim from "@/model/schema/mfa_amr_claim";
+import * as tMfaChallenge from "@/model/schema/mfa_challenge";
+import * as tMfaFactor from "@/model/schema/mfa_factor";
 
 //----------------------------------------------------------------------------
 // Query to create `mfa_amr_claims` table

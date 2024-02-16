@@ -1,7 +1,7 @@
-import { sql } from "kysely";
 import type { KyselyDatabase } from "@/model/client";
 import { PRIMARY_KEY_COLUMN, PRIMARY_KEY_SERIAL_COLUMN, TIMESTAMPS_COLUMN } from "@/model/extends";
 import { type TableIndexBuilder, createIndex } from "@/model/extends";
+import { sql } from "kysely";
 
 import * as tAuditLog from "@/model/schema/audit_log";
 import * as tIdentities from "@/model/schema/identities";
