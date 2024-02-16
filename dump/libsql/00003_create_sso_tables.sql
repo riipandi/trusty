@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS flow_state (
     provider_access_token TEXT,
     provider_refresh_token TEXT,
     authentication_method TEXT NOT NULL,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
     updated_at INTEGER,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
@@ -25,10 +25,9 @@ CREATE INDEX IF NOT EXISTS idx_user_id_auth_method ON flow_state (user_id, authe
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS sso_providers (
     id TEXT PRIMARY KEY NOT NULL,
-    resource_id TEXT,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
-    updated_at INTEGER,
-    CHECK (resource_id IS NULL OR length(resource_id) > 0)
+    resource_id TEXT CHECK (resource_id IS NULL OR length(resource_id) > 0),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
+    updated_at INTEGER
 );
 
 CREATE UNIQUE INDEX sso_providers_resource_id_idx ON sso_providers (lower(resource_id));
@@ -40,7 +39,7 @@ CREATE TABLE IF NOT EXISTS sso_domains (
     id TEXT PRIMARY KEY NOT NULL,
     sso_provider_id TEXT NOT NULL,
     domain TEXT NOT NULL,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
     updated_at INTEGER,
     FOREIGN KEY (sso_provider_id) REFERENCES sso_providers (id) ON DELETE CASCADE,
     CHECK (length(domain) > 0)
@@ -59,7 +58,7 @@ CREATE TABLE IF NOT EXISTS saml_providers (
     metadata_xml TEXT NOT NULL,
     metadata_url TEXT,
     attribute_mapping JSON,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
     updated_at INTEGER,
     FOREIGN KEY (sso_provider_id) REFERENCES sso_providers (id) ON DELETE CASCADE,
     CHECK (length(entity_id) > 0),
@@ -80,7 +79,7 @@ CREATE TABLE IF NOT EXISTS saml_relay_states (
     request_id TEXT NOT NULL,
     for_email TEXT,
     redirect_to TEXT,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
     updated_at INTEGER,
     FOREIGN KEY (sso_provider_id) REFERENCES sso_providers (id) ON DELETE CASCADE,
     FOREIGN KEY (flow_state_id) REFERENCES flow_state (id) ON DELETE CASCADE,

@@ -28,10 +28,6 @@ export interface WithTimeStampSchema {
   updated_at: ColumnType<Date, number | undefined, never>;
 }
 
-export interface WithSoftDeleteSchema {
-  deleted_at: ColumnType<Date, number | undefined, never>;
-}
-
 export const db: Kysely<Database> = new Kysely<Database>({
   dialect: new LibsqlDialect({
     url: env.DATABASE_URL,

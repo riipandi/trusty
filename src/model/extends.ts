@@ -25,10 +25,6 @@ export const TIMESTAMPS_COLUMN = <T extends string, C extends string = never>(
     .addColumn("updated_at", "integer");
 };
 
-export const addSoftDeleteColumn = <T extends string, C extends string = never>(
-  builder: CreateTableBuilder<T, C>,
-) => builder.addColumn("deleted_at", "integer");
-
 export type TableIndexBuilder = {
   kind: "unique" | "normal";
   name: string;
@@ -41,11 +37,13 @@ export async function createIndex(
   table: string,
   index: TableIndexBuilder,
 ): Promise<void> {
-  // Get all indexes: SELECT name FROM sqlite_master WHERE type='index';
+  // Get all indexes: SELECT * FROM sqlite_master WHERE type = 'index' AND sql != '';
   const { kind, name, column, condition } = index;
   const unique = kind === "unique" ? "UNIQUE " : "";
   const params = `${name} ON ${table} (${column}) ${condition ?? ""}`;
   const query = `CREATE ${unique}INDEX IF NOT EXISTS ${params};`;
+
+  // console.log(sql.raw(query).compile(db).sql);
 
   await sql
     .raw(query)

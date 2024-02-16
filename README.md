@@ -34,10 +34,10 @@ See the [license file](./LICENSE) for more information.
 
 ## 📚 References
 
+- [SQLite tutorials](https://www.sqlitetutorial.net)
 - [LibSQL extensions documentation](https://docs.turso.tech/extensions)
 - [Local development with LibSQL](https://docs.turso.tech/local-development)
-- [SQLite tutorials](https://www.sqlitetutorial.net)
-
+- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
 ---
 
 <sub>🤫 Psst! If you like my work you can support me via [GitHub sponsors](https://github.com/sponsors/riipandi).</sub>

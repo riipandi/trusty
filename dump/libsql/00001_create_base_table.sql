@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS users (
     aud TEXT,
     role TEXT,
     email TEXT,
-    email_change_token_new TEXT,
     email_change TEXT,
+    email_change_token_new TEXT,
     email_change_token_current TEXT DEFAULT '',
     email_change_confirm_status INTEGER DEFAULT 0,
     phone TEXT DEFAULT NULL,
@@ -31,13 +31,14 @@ CREATE TABLE IF NOT EXISTS users (
     recovery_sent_at INTEGER,
     reauthentication_sent_at INTEGER,
     confirmed_at INTEGER,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
     updated_at INTEGER,
-    deleted_at INTEGER,
     UNIQUE(phone),
     CHECK(email_change_confirm_status >= 0 AND email_change_confirm_status <= 2)
 );
 
+CREATE INDEX IF NOT EXISTS users_email_idx ON users (email);
+CREATE INDEX IF NOT EXISTS users_phone_idx ON users (phone);
 CREATE UNIQUE INDEX IF NOT EXISTS confirmation_token_idx ON users (confirmation_token) WHERE confirmation_token NOT LIKE '^[0-9 ]*$';
 CREATE UNIQUE INDEX IF NOT EXISTS email_change_token_current_idx ON users (email_change_token_current) WHERE email_change_token_current NOT LIKE '^[0-9 ]*$';
 CREATE UNIQUE INDEX IF NOT EXISTS email_change_token_new_idx ON users (email_change_token_new) WHERE email_change_token_new NOT LIKE '^[0-9 ]*$';
@@ -49,11 +50,11 @@ CREATE UNIQUE INDEX IF NOT EXISTS users_email_partial_key ON users (email) WHERE
 -- Query to create `passwords` table
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS passwords (
-    user_id TEXT NOT NULL,
+    user_id TEXT PRIMARY KEY REFERENCES users (id) ON DELETE NO ACTION,
     encrypted_password TEXT NOT NULL,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
     updated_at INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE NO ACTION
+    CONSTRAINT passwords_user_id_unique UNIQUE (user_id, encrypted_password)
 );
 
 -- -----------------------------------------------------------------------------
@@ -69,7 +70,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     ip TEXT,
     tag TEXT,
     refreshed_at INTEGER,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
     updated_at INTEGER,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (factor_id) REFERENCES mfa_factors (id) ON DELETE CASCADE
@@ -89,7 +90,7 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
     token TEXT,
     revoked INTEGER NOT NULL DEFAULT 0, -- BOOLEAN
     parent TEXT,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
     updated_at INTEGER,
     FOREIGN KEY (session_id) REFERENCES sessions (id) ON DELETE CASCADE
 );
@@ -111,7 +112,7 @@ CREATE TABLE IF NOT EXISTS identities (
     identity_data JSON NOT NULL,
     provider TEXT NOT NULL,
     last_sign_in_at INTEGER,
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL,
     updated_at INTEGER,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
@@ -127,5 +128,5 @@ CREATE TABLE IF NOT EXISTS audit_log (
     id TEXT PRIMARY KEY NOT NULL,
     payload JSON,
     ip_address TEXT DEFAULT '',
-    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now'))
+    created_at INTEGER DEFAULT (strftime('%s', 'now')) NOT NULL
 );
