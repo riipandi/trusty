@@ -1,4 +1,3 @@
-import { sql } from "kysely";
 import type { KyselyDatabase } from "@/model/client";
 import {
   PRIMARY_KEY_COLUMN,
@@ -7,6 +6,7 @@ import {
   TableIndexBuilder,
   createIndex,
 } from "@/model/extends";
+import { sql } from "kysely";
 
 import * as tMfaAmrClaim from "@/model/schema/mfa_amr_claim";
 import * as tMfaChallenge from "@/model/schema/mfa_challenge";

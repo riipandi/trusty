@@ -1,4 +1,3 @@
-import { sql } from "kysely";
 import type { KyselyDatabase } from "@/model/client";
 import {
   PRIMARY_KEY_COLUMN,
@@ -6,6 +5,7 @@ import {
   TableIndexBuilder,
   createIndex,
 } from "@/model/extends";
+import { sql } from "kysely";
 
 import * as tFlowState from "@/model/schema/flow_state";
 import * as tSamlProvider from "@/model/schema/saml_provider";
