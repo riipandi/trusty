@@ -1,0 +1,30 @@
+meta {
+  name: Sign Up
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{BASE_URL}}/signup
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "<email>",
+    "phone": "<string>",
+    "channel": "whatsapp",
+    "password": "<string>",
+    "data": {},
+    "code_challenge": "<string>",
+    "code_challenge_method": "plain",
+    "gotrue_meta_security": {
+      "captcha_token": "<string>"
+    }
+  }
+}
+
+docs {
+  Signs a user up
+}

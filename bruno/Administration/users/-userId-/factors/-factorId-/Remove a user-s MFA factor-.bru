@@ -1,0 +1,11 @@
+meta {
+  name: Remove a user-s MFA factor-
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{BASE_URL}}/admin/users/:userId/factors/:factorId
+  body: none
+  auth: none
+}

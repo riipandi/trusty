@@ -1,0 +1,26 @@
+meta {
+  name: Generate link
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BASE_URL}}/generate_link
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "type": "email_change_new",
+    "email": "<email>",
+    "new_email": "<email>",
+    "password": "<string>",
+    "data": {},
+    "redirect_to": "<uri>"
+  }
+}
+
+docs {
+  Generate a link to send in an email message
+}

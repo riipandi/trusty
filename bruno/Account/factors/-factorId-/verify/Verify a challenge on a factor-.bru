@@ -1,0 +1,18 @@
+meta {
+  name: Verify a challenge on a factor-
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{BASE_URL}}/factors/:factorId/verify
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "challenge_id": "<uuid>",
+    "code": "<string>"
+  }
+}

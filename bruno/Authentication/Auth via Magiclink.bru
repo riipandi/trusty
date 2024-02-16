@@ -1,0 +1,25 @@
+meta {
+  name: Auth via Magiclink
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{BASE_URL}}/magiclink
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "<email>",
+    "data": {},
+    "gotrue_meta_security": {
+      "captcha_token": "<string>"
+    }
+  }
+}
+
+docs {
+  Authenticate a user by sending them a magic link
+}

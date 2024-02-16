@@ -1,0 +1,29 @@
+meta {
+  name: SSO Flow
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BASE_URL}}/sso
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "domain": "<hostname>",
+    "provider_id": "<uuid>",
+    "redirect_to": "<uri>",
+    "skip_http_redirect": "<boolean>",
+    "code_challenge": "<string>",
+    "code_challenge_method": "plain",
+    "gotrue_meta_security": {
+      "captcha_token": "<string>"
+    }
+  }
+}
+
+docs {
+  Initiate a Single-Sign On flow
+}

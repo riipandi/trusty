@@ -1,0 +1,15 @@
+meta {
+  name: Update a user-s MFA factor-
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{BASE_URL}}/admin/users/:userId/factors/:factorId
+  body: json
+  auth: none
+}
+
+body:json {
+  {}
+}

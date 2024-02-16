@@ -1,0 +1,42 @@
+meta {
+  name: Update details about a SSO provider-
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{BASE_URL}}/admin/sso/providers/:ssoProviderId
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "metadata_url": "<uri>",
+    "metadata_xml": "<string>",
+    "domains": [
+      "kbw-137mn.-o4p3a9ht",
+      "tmey.nep1pzt50.b7i0bgjgug.7h7qc"
+    ],
+    "attribute_mapping": {
+      "keys": {
+        "QK": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

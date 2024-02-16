@@ -1,0 +1,23 @@
+meta {
+  name: Authorize
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BASE_URL}}/authorize?provider=%26/"_[~&scopes=RHR?   Pl}z:hZ      .&invite_token=<string>&redirect_to=<uri>&code_challenge_method=s256
+  body: none
+  auth: none
+}
+
+query {
+  provider: &/"_[~
+  scopes: RHR?   Pl}z:hZ      .
+  invite_token: <string>
+  redirect_to: <uri>
+  code_challenge_method: s256
+}
+
+docs {
+  Redirects to an external oauth provider usually for use as clickable links
+}

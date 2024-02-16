@@ -1,0 +1,23 @@
+meta {
+  name: Invite by email
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BASE_URL}}/invite
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "<string>",
+    "data": {}
+  }
+}
+
+docs {
+  Invite a user by email
+  
+}

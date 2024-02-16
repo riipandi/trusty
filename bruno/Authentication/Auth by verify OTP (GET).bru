@@ -1,0 +1,21 @@
+meta {
+  name: Auth by verify OTP (GET)
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{BASE_URL}}/verify?token=<string>&type=email_change&redirect_to=<uri>
+  body: none
+  auth: none
+}
+
+query {
+  token: <string>
+  type: email_change
+  redirect_to: <uri>
+}
+
+docs {
+  Authenticate by verifying the posession of a one time token
+}

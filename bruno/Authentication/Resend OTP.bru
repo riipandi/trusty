@@ -1,0 +1,31 @@
+meta {
+  name: Resend OTP
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{BASE_URL}}/resend
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "email": "<email>",
+    "phone": "<string>",
+    "type": "phone_change",
+    "gotrue_meta_security": {
+      "captcha_token": "<string>"
+    }
+  }
+}
+
+docs {
+  Resends a one time password otp through email or sms
+}

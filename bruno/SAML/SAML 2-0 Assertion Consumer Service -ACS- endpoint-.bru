@@ -1,0 +1,17 @@
+meta {
+  name: SAML 2-0 Assertion Consumer Service -ACS- endpoint-
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{BASE_URL}}/saml/acs?RelayState=<uri>&SAMLArt=<string>&SAMLResponse=<string>
+  body: none
+  auth: none
+}
+
+query {
+  RelayState: <uri>
+  SAMLArt: <string>
+  SAMLResponse: <string>
+}

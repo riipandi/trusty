@@ -1,0 +1,30 @@
+meta {
+  name: Auth via OTP
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{BASE_URL}}/otp
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "<email>",
+    "phone": "<string>",
+    "channel": "whatsapp",
+    "create_user": "<boolean>",
+    "data": {},
+    "code_challenge_method": "s256",
+    "code_challenge": "<string>",
+    "gotrue_meta_security": {
+      "captcha_token": "<string>"
+    }
+  }
+}
+
+docs {
+  Authenticate a user by sending them a one time password over email or sms
+}

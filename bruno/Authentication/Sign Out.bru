@@ -1,0 +1,19 @@
+meta {
+  name: Sign Out
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BASE_URL}}/logout?scope=local
+  body: none
+  auth: none
+}
+
+query {
+  scope: local
+}
+
+docs {
+  Logs out a user
+}

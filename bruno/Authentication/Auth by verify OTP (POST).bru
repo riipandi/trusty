@@ -1,0 +1,26 @@
+meta {
+  name: Auth by verify OTP (POST)
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{BASE_URL}}/verify
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "type": "invite",
+    "token": "<string>",
+    "token_hash": "<string>",
+    "email": "<email>",
+    "phone": "<string>",
+    "redirect_to": "<uri>"
+  }
+}
+
+docs {
+  Authenticate by verifying the posession of a one time token
+}

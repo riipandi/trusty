@@ -1,0 +1,52 @@
+meta {
+  name: Update user-s account data-
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{BASE_URL}}/admin/users/:userId
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "<uuid>",
+    "aud": "<string>",
+    "role": "<string>",
+    "email": "<string>",
+    "email_confirmed_at": "<dateTime>",
+    "phone": "<string>",
+    "phone_confirmed_at": "<dateTime>",
+    "confirmation_sent_at": "<dateTime>",
+    "confirmed_at": "<dateTime>",
+    "recovery_sent_at": "<dateTime>",
+    "new_email": "<email>",
+    "email_change_sent_at": "<dateTime>",
+    "new_phone": "<string>",
+    "phone_change_sent_at": "<dateTime>",
+    "reauthentication_sent_at": "<dateTime>",
+    "last_sign_in_at": "<dateTime>",
+    "app_metadata": {},
+    "user_metadata": {},
+    "factors": [
+      {
+        "id": "<uuid>",
+        "status": "<string>",
+        "friendly_name": "<string>",
+        "factor_type": "<string>"
+      },
+      {
+        "id": "<uuid>",
+        "status": "<string>",
+        "friendly_name": "<string>",
+        "factor_type": "<string>"
+      }
+    ],
+    "banned_until": "<dateTime>",
+    "created_at": "<dateTime>",
+    "updated_at": "<dateTime>",
+    "deleted_at": "<dateTime>"
+  }
+}
