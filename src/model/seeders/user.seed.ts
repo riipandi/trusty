@@ -1,4 +1,4 @@
-import { Scrypt } from "oslo/password";
+import { Argon2id } from "oslo/password";
 import { typeid } from "typeid-js";
 
 import { type KyselyDatabase } from "@/model/client";
@@ -26,7 +26,7 @@ export async function userSeeder(db: KyselyDatabase) {
     ];
 
     await db.transaction().execute(async (trx) => {
-      const passwordHasher = new Scrypt();
+      const passwordHasher = new Argon2id();
 
       const newUsers = await trx
         .insertInto("users")

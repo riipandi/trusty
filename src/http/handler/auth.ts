@@ -8,7 +8,7 @@ import { jsonResponse, throwResponse } from "@/http/response";
 import type { LoginRequest } from "@/http/validator/auth";
 
 export async function login(c: Context) {
-  const { username } = await c.req.json<LoginRequest>();
+  const { email } = await c.req.json<LoginRequest>();
 
   const jwtSecret = c.env.JWT_SECRET || "sup3r-duper-Secret-key";
   const expiresIn = 3600;
@@ -19,7 +19,7 @@ export async function login(c: Context) {
 
   const payload: JwtPayload = {
     sub: sessionId,
-    aud: username,
+    aud: email,
     iss: issuer,
     jti: tokenId,
     iat: Math.floor(Date.now() / 1000),
