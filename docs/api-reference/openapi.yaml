@@ -30,7 +30,7 @@ externalDocs:
   description: Learn more about Supabase Auth
   url: https://supabase.com/docs/guides/auth/overview
 servers:
-  - url: 'https://fastrue-demo.fly.dev/api'
+  - url: 'https://trusty-demo.fly.dev/api'
     variables:
       project:
         description: >
