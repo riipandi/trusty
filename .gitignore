@@ -64,3 +64,5 @@ testem.log
 !/static/robots.txt
 src/model/generated/
 benchmark-results.bin
+bruno/environments/*
+!bruno/environments/development.bru
