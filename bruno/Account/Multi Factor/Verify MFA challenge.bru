@@ -1,7 +1,7 @@
 meta {
-  name: Verify a challenge on a factor-
+  name: Verify MFA challenge
   type: http
-  seq: 1
+  seq: 4
 }
 
 post {
@@ -15,4 +15,8 @@ body:json {
     "challenge_id": "<uuid>",
     "code": "<string>"
   }
+}
+
+docs {
+  Verify a challenge on a factor
 }

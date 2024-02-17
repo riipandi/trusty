@@ -1,5 +1,5 @@
 meta {
-  name: Fetch a list of all registered SSO providers-
+  name: List registered SSO roviders
   type: http
   seq: 1
 }
@@ -12,4 +12,8 @@ get {
 
 auth:bearer {
   token: {{ACCESS_TOKEN}}
+}
+
+docs {
+  Fetch a list of all registered sso providers
 }

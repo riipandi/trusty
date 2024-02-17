@@ -1,11 +1,11 @@
 meta {
-  name: Update details about a SSO provider-
+  name: Register SSO provider
   type: http
   seq: 2
 }
 
-put {
-  url: {{BASE_URL}}/admin/sso/providers/:ssoProviderId
+post {
+  url: {{BASE_URL}}/admin/sso/providers
   body: json
   auth: bearer
 }
@@ -16,15 +16,16 @@ auth:bearer {
 
 body:json {
   {
+    "type": "saml",
     "metadata_url": "<uri>",
     "metadata_xml": "<string>",
     "domains": [
-      "kbw-137mn.-o4p3a9ht",
-      "tmey.nep1pzt50.b7i0bgjgug.7h7qc"
+      "<hostname>",
+      "<hostname>"
     ],
     "attribute_mapping": {
       "keys": {
-        "QK": {
+        "v5@d'yWe|": {
           "oneOf": [
             {
               "type": "string"
@@ -43,4 +44,8 @@ body:json {
       }
     }
   }
+}
+
+docs {
+  Register a new SSO provider
 }

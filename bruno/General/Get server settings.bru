@@ -1,0 +1,15 @@
+meta {
+  name: Get server settings
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BASE_URL}}/settings
+  body: none
+  auth: none
+}
+
+docs {
+  Retrieve some of the public settings of the server
+}

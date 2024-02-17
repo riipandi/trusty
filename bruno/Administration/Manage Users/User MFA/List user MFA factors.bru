@@ -1,5 +1,5 @@
 meta {
-  name: List all of the MFA factors for a user-
+  name: List user MFA factors
   type: http
   seq: 1
 }
@@ -12,4 +12,8 @@ get {
 
 auth:bearer {
   token: {{ACCESS_TOKEN}}
+}
+
+docs {
+  List all of the MFA factors for a user
 }

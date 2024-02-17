@@ -1,11 +1,15 @@
 meta {
-  name: Remove a MFA factor from a user-
+  name: Remove MFA factor
   type: http
-  seq: 1
+  seq: 2
 }
 
 delete {
   url: {{BASE_URL}}/factors/:factorId
   body: none
   auth: none
+}
+
+docs {
+  Remove a MFA factor from a user
 }

@@ -1,10 +1,10 @@
 meta {
-  name: Delete a user-
+  name: Get user details
   type: http
-  seq: 3
+  seq: 2
 }
 
-delete {
+get {
   url: {{BASE_URL}}/admin/users/:userId
   body: none
   auth: bearer
@@ -12,4 +12,8 @@ delete {
 
 auth:bearer {
   token: {{ACCESS_TOKEN}}
+}
+
+docs {
+  Fetch user account data for a user
 }

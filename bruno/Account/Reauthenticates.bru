@@ -1,0 +1,15 @@
+meta {
+  name: Reauthenticates
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BASE_URL}}/reauthenticate
+  body: none
+  auth: none
+}
+
+docs {
+  Reauthenticates the possession of an email or phone number for the purpose of password change.
+}
