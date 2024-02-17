@@ -1,5 +1,5 @@
-import { Context } from "hono";
 import { jsonResponse, throwResponse } from "@/http/response";
+import { Context } from "hono";
 
 export async function listSSOProviders(c: Context) {
   return jsonResponse(c, "Fetch a list of all registered sso providers");

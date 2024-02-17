@@ -1,5 +1,5 @@
-import { type HttpBindings } from "@hono/node-server";
 import { KyselyDatabase } from "@/model/client";
+import { type HttpBindings } from "@hono/node-server";
 
 export type Bindings = HttpBindings & {};
 

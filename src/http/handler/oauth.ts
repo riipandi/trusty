@@ -1,6 +1,6 @@
+import { jsonResponse } from "@/http/response";
 import { consola } from "consola";
 import { Context } from "hono";
-import { jsonResponse } from "@/http/response";
 
 export async function authorize(c: Context) {
   return jsonResponse(

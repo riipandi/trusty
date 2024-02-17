@@ -7,12 +7,12 @@ import { etag } from "hono/etag";
 import { getPath } from "hono/utils/url";
 
 import env from "@/config";
+import { GlobalEnv } from "@/global";
 import { logger } from "@/http/middleware/logger";
 import { onErrorResponse, throwResponse } from "@/http/response";
+import { db } from "@/model/client";
 import apiRoutes from "@/routes/api";
 import webRoutes from "@/routes/web";
-import { GlobalEnv } from "@/global";
-import { db } from "@/model/client";
 
 const app = new Hono<GlobalEnv>();
 

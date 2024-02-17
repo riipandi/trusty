@@ -1,5 +1,5 @@
-import { Context } from "hono";
 import { jsonResponse } from "@/http/response";
+import { Context } from "hono";
 
 export async function index(c: Context) {
   return jsonResponse(c, "Trusty API v1");

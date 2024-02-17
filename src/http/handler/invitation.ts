@@ -1,5 +1,5 @@
-import { Context } from "hono";
 import { jsonResponse, throwResponse } from "@/http/response";
+import { Context } from "hono";
 
 export async function invite(c: Context) {
   return jsonResponse(c, "Invite a user by email");

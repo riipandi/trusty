@@ -1,7 +1,7 @@
-import { Context } from "hono";
-import { jsonResponse, throwResponse } from "@/http/response";
 import { JwtPayload } from "@/http/middleware/jwt";
+import { jsonResponse, throwResponse } from "@/http/response";
 import * as userRepo from "@/model/repository/user.repo";
+import { Context } from "hono";
 
 export async function getUsers(c: Context) {
   const users = await userRepo.findAllUsers(c.var.db);

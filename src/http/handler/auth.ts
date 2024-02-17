@@ -4,9 +4,9 @@ import * as Jwt from "hono/jwt";
 import { typeid } from "typeid-js";
 
 import { AppConfig } from "@/config";
+import { JwtPayload } from "@/http/middleware/jwt";
 import { jsonResponse } from "@/http/response";
 import type { LoginRequest } from "@/http/validator/auth";
-import { JwtPayload } from "@/http/middleware/jwt";
 
 export async function token(c: Context) {
   const { email } = await c.req.json<LoginRequest>();
