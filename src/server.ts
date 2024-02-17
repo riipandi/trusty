@@ -1,17 +1,17 @@
 import { serve } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
-import { getPath } from "hono/utils/url";
 import { getRuntimeKey } from "hono/adapter";
 import { csrf } from "hono/csrf";
 import { showRoutes } from "hono/dev";
 import { etag } from "hono/etag";
-import { serveStatic } from "@hono/node-server/serve-static";
+import { getPath } from "hono/utils/url";
 
+import env from "@/config";
 import { logger } from "@/http/middleware/logger";
 import { onErrorResponse, throwResponse } from "@/http/response";
 import apiRoutes from "@/routes/api";
 import webRoutes from "@/routes/web";
-import env from "@/config";
 
 const app = new Hono();
 
