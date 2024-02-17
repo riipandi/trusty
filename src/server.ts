@@ -25,7 +25,7 @@ app.notFound((c) => {
   // Check if it's an API request
   const path = getPath(c.req.raw);
   if (path.startsWith("/api")) {
-    return throwResponse(c, 404, "Resource not found");
+    return throwResponse(c, 404, "No route matched with those values");
   }
   return c.html("Not found", 404);
 });

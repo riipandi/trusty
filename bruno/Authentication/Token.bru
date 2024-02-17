@@ -5,32 +5,19 @@ meta {
 }
 
 post {
-  url: {{BASE_URL}}/token?grant_type=id_token
+  url: {{BASE_URL}}/token?grant_type=password
   body: json
   auth: none
 }
 
 query {
-  grant_type: id_token
+  grant_type: password
 }
 
 body:json {
   {
-    "refresh_token": "<string>",
-    "password": "<string>",
-    "email": "admin@example.com",
-    "phone": "<string>",
-    "id_token": "<string>",
-    "access_token": "<string>",
-    "nonce": "<string>",
-    "provider": "apple",
-    "client_id": "<string>",
-    "issuer": "<string>",
-    "gotrue_meta_security": {
-      "captcha_token": "<string>"
-    },
-    "auth_code": "<uuid>",
-    "code_verifier": "<string>"
+    "email": "riipandi@gmail.com",
+    "password": "<string>"
   }
 }
 
@@ -45,5 +32,27 @@ assert {
 }
 
 docs {
-  Issues access and refresh tokens based on grant type
+  Issues access and refresh tokens based on grant type.
+  
+  ### Payload
+  
+  ```json
+  {
+    "password": "<string>",
+    "email": "admin@example.com",
+    "phone": "<string>",
+    "id_token": "<string>",
+    "refresh_token": "<string>",
+    "access_token": "<string>",
+    "nonce": "<string>",
+    "provider": "apple",
+    "client_id": "<string>",
+    "issuer": "<string>",
+    "gotrue_meta_security": {
+      "captcha_token": "<string>"
+    },
+    "auth_code": "<uuid>",
+    "code_verifier": "<string>"
+  }
+  ```
 }

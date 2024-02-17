@@ -32,6 +32,9 @@ dependencies:
   kysely:
     specifier: ^0.27.2
     version: 0.27.2
+  kysely-plugin-serialize:
+    specifier: ^0.5.7
+    version: 0.5.7(kysely@0.27.2)
   oslo:
     specifier: ^1.1.1
     version: 1.1.1
@@ -4455,6 +4458,14 @@ packages:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
     dev: true
+
+  /kysely-plugin-serialize@0.5.7(kysely@0.27.2):
+    resolution: {integrity: sha512-FWPcH7eR3i059iogfzQS3qzNABQbUEnJug1paQ74G3MSUUgKAC5hp7T75oeHrnWgNHYCvQJfppD29vHXGVRgAg==}
+    peerDependencies:
+      kysely: '>=0.26'
+    dependencies:
+      kysely: 0.27.2
+    dev: false
 
   /kysely@0.27.2:
     resolution: {integrity: sha512-DmRvEfiR/NLpgsTbSxma2ldekhsdcd65+MNiKXyd/qj7w7X5e3cLkXxcj+MypsRDjPhHQ/CD5u3Eq1sBYzX0bw==}

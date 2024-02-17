@@ -1,5 +1,10 @@
 import type { KyselyDatabase } from "@/model/client";
-import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN, TIMESTAMP_MS } from "@/model/extends";
+import {
+  PRIMARY_KEY_COLUMN,
+  SOFT_DELETED_COLUMN,
+  TIMESTAMPS_COLUMN,
+  TIMESTAMP_MS,
+} from "@/model/extends";
 import { type TableIndexBuilder, createIndex } from "@/model/extends";
 import { sql } from "kysely";
 
@@ -23,17 +28,17 @@ const UserMigrationQuery = (db: KyselyDatabase) =>
     .addColumn("email_change", "text")
     .addColumn("email_change_token_new", "text")
     .addColumn("email_change_token_current", "text")
-    .addColumn("email_change_confirm_status", "integer", (col) => col.notNull().defaultTo(0))
+    .addColumn("email_change_confirm_status", "integer", (col) => col.defaultTo(0))
     .addColumn("phone", "text", (col) => col.unique())
     .addColumn("phone_change", "text")
     .addColumn("phone_change_token", "text")
     .addColumn("raw_app_meta_data", "jsonb")
-    .addColumn("raw_user_meta_data", "json")
+    .addColumn("raw_user_meta_data", "jsonb")
     .addColumn("confirmation_token", "text")
     .addColumn("recovery_token", "text")
     .addColumn("reauthentication_token", "text")
-    .addColumn("is_super_admin", "integer", (col) => col.notNull().defaultTo(0)) // boolean
-    .addColumn("is_sso_user", "integer", (col) => col.notNull().defaultTo(0)) // boolean
+    .addColumn("is_super_admin", "integer", (col) => col.defaultTo(0)) // boolean
+    .addColumn("is_sso_user", "integer", (col) => col.defaultTo(0)) // boolean
     .addColumn("last_sign_in_at", "integer")
     .addColumn("banned_until", "integer")
     .addColumn("invited_at", "integer")
@@ -46,6 +51,7 @@ const UserMigrationQuery = (db: KyselyDatabase) =>
     .addColumn("reauthentication_sent_at", "integer")
     .addColumn("confirmed_at", "integer")
     .$call(TIMESTAMPS_COLUMN)
+    .$call(SOFT_DELETED_COLUMN)
     .ifNotExists();
 
 const UserTableIndexes: TableIndexBuilder[] = [

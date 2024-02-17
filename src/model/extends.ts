@@ -32,6 +32,10 @@ export const TIMESTAMPS_COLUMN = <T extends string, C extends string = never>(
     .addColumn("updated_at", "integer");
 };
 
+export const SOFT_DELETED_COLUMN = <T extends string, C extends string = never>(
+  builder: CreateTableBuilder<T, C>,
+) => builder.addColumn("deleted_at", "integer");
+
 export type TableIndexBuilder = {
   kind: "unique" | "normal";
   name: string;

@@ -1,9 +1,9 @@
-import { WithTimeStampSchema } from "@/model/client";
+import { WithSoftDeleteTimeStamp, WithTimeStampSchema } from "@/model/client";
 import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
 
 export const TABLE_NAME = "users";
 
-export interface UserTable extends WithTimeStampSchema {
+export interface UserTable extends WithTimeStampSchema, WithSoftDeleteTimeStamp {
   id: Generated<string>;
   aud?: string | null;
   role?: string | null;
@@ -22,17 +22,17 @@ export interface UserTable extends WithTimeStampSchema {
   reauthentication_token?: string | null;
   is_super_admin: boolean;
   is_sso_user?: boolean;
-  last_sign_in_at?: ColumnType<Date, number | undefined, never>;
-  banned_until?: ColumnType<Date, number | undefined, never>;
-  invited_at?: ColumnType<Date, number | undefined, never>;
-  email_confirmed_at?: ColumnType<Date, number | undefined, never>;
-  email_change_sent_at?: ColumnType<Date, number | undefined, never>;
-  phone_confirmed_at?: ColumnType<Date, number | undefined, never>;
-  phone_change_sent_at?: ColumnType<Date, number | undefined, never>;
-  confirmation_sent_at?: ColumnType<Date, number | undefined, never>;
-  recovery_sent_at?: ColumnType<Date, number | undefined, never>;
-  reauthentication_sent_at?: ColumnType<Date, number | undefined, never>;
-  confirmed_at?: ColumnType<Date, number | undefined, never>;
+  last_sign_in_at?: ColumnType<Date, number | null, never>;
+  banned_until?: ColumnType<Date, number | null, never>;
+  invited_at?: ColumnType<Date, number | null, never>;
+  email_confirmed_at?: ColumnType<Date, number | null, never>;
+  email_change_sent_at?: ColumnType<Date, number | null, never>;
+  phone_confirmed_at?: ColumnType<Date, number | null, never>;
+  phone_change_sent_at?: ColumnType<Date, number | null, never>;
+  confirmation_sent_at?: ColumnType<Date, number | null, never>;
+  recovery_sent_at?: ColumnType<Date, number | null, never>;
+  reauthentication_sent_at?: ColumnType<Date, number | null, never>;
+  confirmed_at?: ColumnType<Date, number | null, never>;
 }
 
 export type User = Selectable<UserTable>;

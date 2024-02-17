@@ -1,6 +1,8 @@
-import { Client as LibSQLClient, type Config as LibSQLConfig, createClient } from "@libsql/client";
-import { LibsqlDialect, type LibsqlDialectConfig } from "@libsql/kysely-libsql";
+import { Client as LibSQLClient, createClient } from "@libsql/client";
+import { LibsqlDialect } from "@libsql/kysely-libsql";
 import { ColumnType, Kysely } from "kysely";
+import { ParseJSONResultsPlugin } from "kysely";
+import { SerializePlugin } from "kysely-plugin-serialize";
 
 import { PasswordTable } from "@/model/schema/password";
 import { SessionTable } from "@/model/schema/session";
@@ -24,8 +26,12 @@ export interface Database {
 }
 
 export interface WithTimeStampSchema {
-  created_at: ColumnType<Date, number | undefined, never>;
-  updated_at: ColumnType<Date, number | undefined, never>;
+  created_at: ColumnType<Date, number | null, never>;
+  updated_at: ColumnType<Date, number | null, never>;
+}
+
+export interface WithSoftDeleteTimeStamp {
+  deleted_at: ColumnType<Date, number | null, never>;
 }
 
 const DBClientConfig: { url: string; authToken?: string } = {
@@ -39,6 +45,9 @@ export const sqlClient: LibSQLClient = createClient({ ...DBClientConfig });
 export const db: Kysely<Database> = new Kysely<Database>({
   dialect: new LibsqlDialect(DBClientConfig),
   log: env.NODE_ENV === "development" ? ["error", "query"] : ["error"],
+  plugins: [
+    new SerializePlugin(), // This plugin should be placed at the end of plugins array
+  ],
 });
 
 export type KyselyDatabase = Kysely<Database>;
