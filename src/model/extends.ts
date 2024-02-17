@@ -4,18 +4,25 @@ import { CreateTableBuilder, sql } from "kysely";
 // Timestamp in milliseconds for `created_at` column.
 // ISO 8601 UTC timestamp: sql.raw("SELECT strftime('%Y-%m-%dT%H:%M:%fZ', 'now')")
 export const TIMESTAMP_MS = sql.raw("(strftime('%s', 'now'))");
+export const UUID_V4 = sql.raw(
+  "(lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))), 2) || '-' || substr('89ab', 1 + (abs(random()) % 4) , 1) || substr(lower(hex(randomblob(2))), 2) || '-' || lower(hex(randomblob(6))))",
+);
 
 export const PRIMARY_KEY_COLUMN = <T extends string, C extends string = never>(
   builder: CreateTableBuilder<T, C>,
-) => builder.addColumn("id", "text", (col) => col.primaryKey());
-
-export const TYPE_ID_COLUMN = <T extends string, C extends string = never>(
-  builder: CreateTableBuilder<T, C>,
-) => builder.addColumn("type_id", "text", (col) => col.unique().notNull());
+) => builder.addColumn("id", "text", (col) => col.primaryKey().defaultTo(UUID_V4).notNull());
 
 export const PRIMARY_KEY_SERIAL_COLUMN = <T extends string, C extends string = never>(
   builder: CreateTableBuilder<T, C>,
 ) => builder.addColumn("id", "integer", (col) => col.primaryKey().autoIncrement());
+
+export const PUBLIC_ID_COLUMN = <T extends string, C extends string = never>(
+  builder: CreateTableBuilder<T, C>,
+) => {
+  return builder.addColumn("public_id", "text", (col) =>
+    col.unique().defaultTo(sql.raw("(lower(hex(randomblob(12))))")).notNull(),
+  );
+};
 
 export const TIMESTAMPS_COLUMN = <T extends string, C extends string = never>(
   builder: CreateTableBuilder<T, C>,
@@ -48,5 +55,5 @@ export async function createIndex(
   await sql
     .raw(query)
     .execute(db)
-    .catch((err) => console.error("Failed to create index:", err.message));
+    .catch((err) => console.error(`Failed to create index ${index.name}:`, err.message));
 }

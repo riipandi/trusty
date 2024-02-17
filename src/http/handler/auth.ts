@@ -3,14 +3,25 @@ import { Context } from "hono";
 import * as Jwt from "hono/jwt";
 import { typeid } from "typeid-js";
 
-import { JwtPayload } from "@/global";
 import { jsonResponse, throwResponse } from "@/http/response";
 import type { LoginRequest } from "@/http/validator/auth";
+import { AppConfig } from "@/config";
+
+export type JwtPayload = {
+  sub: string;
+  jti: string;
+  iat: number;
+  exp: number;
+  iss: string;
+  aud: string;
+};
 
 export async function login(c: Context) {
   const { email } = await c.req.json<LoginRequest>();
+  const { APP_SECRET_KEY } = AppConfig(c);
 
-  const jwtSecret = c.env.JWT_SECRET || "sup3r-duper-Secret-key";
+  console.log("AppConfig", APP_SECRET_KEY);
+
   const expiresIn = 3600;
 
   const issuer = "Trusty Auth";
@@ -26,9 +37,11 @@ export async function login(c: Context) {
     exp: Math.floor(Date.now() / 1000) + expiresIn,
   };
 
-  const access_token = await Jwt.sign(payload, jwtSecret, "HS256");
+  const access_token = await Jwt.sign(payload, APP_SECRET_KEY, "HS256");
 
-  return jsonResponse(c, "Issues access and refresh tokens based on grant type", { access_token });
+  return jsonResponse(c, "Issues access and refresh tokens based on grant type", {
+    access_token,
+  });
 }
 
 export async function whoami(c: Context) {

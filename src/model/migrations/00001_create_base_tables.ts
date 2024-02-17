@@ -1,10 +1,5 @@
 import type { KyselyDatabase } from "@/model/client";
-import {
-  PRIMARY_KEY_COLUMN,
-  PRIMARY_KEY_SERIAL_COLUMN,
-  TIMESTAMPS_COLUMN,
-  TIMESTAMP_MS,
-} from "@/model/extends";
+import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN, TIMESTAMP_MS } from "@/model/extends";
 import { type TableIndexBuilder, createIndex } from "@/model/extends";
 import { sql } from "kysely";
 
@@ -60,31 +55,31 @@ const UserTableIndexes: TableIndexBuilder[] = [
     kind: "unique",
     name: "confirmation_token_idx",
     column: "confirmation_token",
-    condition: "WHERE confirmation_token NOT LIKE '^[0-9 ]*$'",
+    condition: "WHERE confirmation_token GLOB '*[^0-9 ]*'",
   },
   {
     kind: "unique",
     name: "email_change_token_current_idx",
     column: "email_change_token_current",
-    condition: "WHERE email_change_token_current NOT LIKE '^[0-9 ]*$'",
+    condition: "WHERE email_change_token_current GLOB '*[^0-9 ]*'",
   },
   {
     kind: "unique",
     name: "email_change_token_new_idx",
     column: "email_change_token_new",
-    condition: "WHERE email_change_token_new NOT LIKE '^[0-9 ]*$'",
+    condition: "WHERE email_change_token_new GLOB '*[^0-9 ]*'",
   },
   {
     kind: "unique",
     name: "reauthentication_token_idx",
     column: "reauthentication_token",
-    condition: "WHERE reauthentication_token NOT LIKE '^[0-9 ]*$'",
+    condition: "WHERE reauthentication_token GLOB '*[^0-9 ]*'",
   },
   {
     kind: "unique",
     name: "recovery_token_idx",
     column: "recovery_token",
-    condition: "WHERE recovery_token NOT LIKE '^[0-9 ]*$'",
+    condition: "WHERE recovery_token GLOB '*[^0-9 ]*'",
   },
   {
     kind: "unique",
@@ -141,7 +136,7 @@ const SessionsTableIndexes: TableIndexBuilder[] = [
 const RefreshTokenMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tRefreshToken.TABLE_NAME)
-    .$call(PRIMARY_KEY_SERIAL_COLUMN)
+    .$call(PRIMARY_KEY_COLUMN)
     .addColumn("session_id", "text", (col) =>
       col.references("sessions.id").onDelete("cascade").notNull(),
     )

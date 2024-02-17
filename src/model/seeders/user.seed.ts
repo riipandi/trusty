@@ -9,7 +9,7 @@ export async function userSeeder(db: KyselyDatabase) {
     const usersWithPasswords: { user: InsertUser; password: string }[] = [
       {
         user: {
-          id: typeid("user").toString(),
+          // id: typeid("user").toString(),
           email: "admin@example.com",
           is_super_admin: true,
         },
@@ -17,7 +17,7 @@ export async function userSeeder(db: KyselyDatabase) {
       },
       {
         user: {
-          id: typeid("user").toString(),
+          // id: typeid("user").toString(),
           email: "john@example.com",
           is_super_admin: false,
         },

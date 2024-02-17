@@ -1,5 +1,5 @@
-import { Client as LibSQLClient, createClient } from "@libsql/client";
-import { LibsqlDialect } from "@libsql/kysely-libsql";
+import { type Config as LibSQLConfig, Client as LibSQLClient, createClient } from "@libsql/client";
+import { type LibsqlDialectConfig, LibsqlDialect } from "@libsql/kysely-libsql";
 import { ColumnType, Kysely } from "kysely";
 
 import { PasswordTable } from "@/model/schema/password";
@@ -28,19 +28,17 @@ export interface WithTimeStampSchema {
   updated_at: ColumnType<Date, number | undefined, never>;
 }
 
-export const db: Kysely<Database> = new Kysely<Database>({
-  dialect: new LibsqlDialect({
-    url: env.DATABASE_URL,
-    authToken: env.DATABASE_TOKEN,
-  }),
-  log: env.NODE_ENV === "development" ? ["error", "query"] : ["error"],
-});
-
-export const sqlc: LibSQLClient = createClient({
+const DBClientConfig: { url: string; authToken?: string } = {
   url: env.DATABASE_URL,
   authToken: env.DATABASE_TOKEN,
-  // @ref: https://github.com/tursodatabase/libsql-client-ts/blob/main/packages/libsql-client/examples/sync.js
-  // syncUrl: env.DATABASE_URL, // Sync mode
+};
+
+// @ref: https://github.com/tursodatabase/libsql-client-ts/blob/main/packages/libsql-client/examples/sync.js
+export const sqlClient: LibSQLClient = createClient({ ...DBClientConfig });
+
+export const db: Kysely<Database> = new Kysely<Database>({
+  dialect: new LibsqlDialect(DBClientConfig),
+  log: env.NODE_ENV === "development" ? ["error", "query"] : ["error"],
 });
 
 export type KyselyDatabase = Kysely<Database>;

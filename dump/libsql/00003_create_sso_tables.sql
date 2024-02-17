@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS sso_domains (
     CHECK (length(domain) > 0)
 );
 
-CREATE UNIQUE INDEX sso_domains_domain_idx ON sso_domains (lower(domain));
+CREATE UNIQUE INDEX sso_domains_domain_idx ON sso_domains (domain);
 CREATE INDEX IF NOT EXISTS sso_domains_sso_provider_id_idx ON sso_domains (sso_provider_id);
 
 -- -----------------------------------------------------------------------------

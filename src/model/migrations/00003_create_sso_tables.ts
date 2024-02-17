@@ -74,7 +74,7 @@ const SSODomainMigrationQuery = (db: KyselyDatabase) =>
     .ifNotExists();
 
 const SSODomainTableIndexes: TableIndexBuilder[] = [
-  { kind: "unique", name: "sso_domains_domain_idx", column: "lower(domain)" },
+  { kind: "unique", name: "sso_domains_domain_idx", column: "domain" },
   { kind: "normal", name: "sso_domains_sso_provider_id_idx", column: "sso_provider_id" },
 ];
 

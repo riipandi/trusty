@@ -5,18 +5,18 @@ iterations: '{{ I }}'
 concurrency: '{{ C }}'
 
 plan:
-  - name: Sign in
-    request:
-      url: /api/auth/login
-      method: POST
-      tags: [post_auth]
-      headers:
-        Content-Type: 'application/json'
-      body: '{ "username": "admin", "password": "adminPassword" }'
-
-  # - name: Fetch all users
+  # - name: Sign in
   #   request:
-  #     url: /api/users
-  #     method: GET
+  #     url: /api/token
+  #     method: POST
+  #     tags: [post_auth]
   #     headers:
-  #       Authorization: Bearer {{ JWT_TOKEN }}
+  #       Content-Type: 'application/json'
+  #     body: '{ "username": "admin", "password": "adminPassword" }'
+
+  - name: Fetch all users
+    request:
+      url: /api/admin/users
+      method: GET
+      headers:
+        Authorization: Bearer {{ JWT_TOKEN }}
