@@ -3,7 +3,6 @@ import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
 import { getRuntimeKey } from "hono/adapter";
 import { csrf } from "hono/csrf";
-import { showRoutes } from "hono/dev";
 import { etag } from "hono/etag";
 import { getPath } from "hono/utils/url";
 
@@ -12,13 +11,21 @@ import { logger } from "@/http/middleware/logger";
 import { onErrorResponse, throwResponse } from "@/http/response";
 import apiRoutes from "@/routes/api";
 import webRoutes from "@/routes/web";
+import { GlobalEnv } from "@/global";
+import { db } from "@/model/client";
 
-const app = new Hono();
+const app = new Hono<GlobalEnv>();
 
 // Global middlewares
 app.use("*", logger());
 app.use("*", etag());
 app.use("*", csrf({ origin: "*" }));
+
+// Singleton context for database
+app.use(async (c, next) => {
+  c.set("db", db);
+  await next();
+});
 
 // Error handling
 app.notFound((c) => {
@@ -47,8 +54,6 @@ app.use("/robots.txt", serveStatic({ path: "./public/robots.txt" }));
 app.get("/", (c) => c.redirect("/ui", 302));
 app.route("/api", apiRoutes);
 app.route("/ui", webRoutes);
-
-showRoutes(app);
 
 const hostname = env.HOSTNAME;
 const port = env.PORT;

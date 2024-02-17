@@ -4,19 +4,11 @@ import * as Jwt from "hono/jwt";
 import { typeid } from "typeid-js";
 
 import { AppConfig } from "@/config";
-import { jsonResponse, throwResponse } from "@/http/response";
+import { jsonResponse } from "@/http/response";
 import type { LoginRequest } from "@/http/validator/auth";
+import { JwtPayload } from "@/http/middleware/jwt";
 
-export type JwtPayload = {
-  sub: string;
-  jti: string;
-  iat: number;
-  exp: number;
-  iss: string;
-  aud: string;
-};
-
-export async function login(c: Context) {
+export async function token(c: Context) {
   const { email } = await c.req.json<LoginRequest>();
   const { APP_SECRET_KEY } = AppConfig(c);
 
@@ -41,19 +33,39 @@ export async function login(c: Context) {
   });
 }
 
-export async function whoami(c: Context) {
-  const jwtPayload = c.get("jwtPayload") as JwtPayload;
-  console.info("jwtPayload", jwtPayload);
+export async function logout(c: Context) {
+  return jsonResponse(c, "Logs out a user");
+}
 
-  if (!jwtPayload) {
-    return throwResponse(c, 201, "No data");
-  }
+export async function verifyGet(c: Context) {
+  const message =
+    "Authenticate by verifying the posession of a one time token usually for use as clickable links";
+  return jsonResponse(c, message);
+}
 
-  const payload = {
-    remoteAddress: c.env.incoming.socket.remoteAddress,
-    userAgent: c.req.header("User-Agent"),
-    jwt: jwtPayload,
-  };
+export async function verifyPost(c: Context) {
+  return jsonResponse(c, "Authenticate by verifying the posession of a one time token");
+}
 
-  return jsonResponse(c, "Fetch the latest user account information", payload);
+export async function signup(c: Context) {
+  return jsonResponse(c, "Signs a user up");
+}
+
+export async function recover(c: Context) {
+  return jsonResponse(c, "Request password recovery");
+}
+
+export async function resend(c: Context) {
+  return jsonResponse(c, "Resends a one time password otp through email or sms");
+}
+
+export async function magiclink(c: Context) {
+  return jsonResponse(c, "Authenticate a user by sending them a magic link");
+}
+
+export async function otp(c: Context) {
+  return jsonResponse(
+    c,
+    "Authenticate a user by sending them a one time password over email or sms",
+  );
 }

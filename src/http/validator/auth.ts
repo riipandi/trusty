@@ -1,6 +1,6 @@
 import * as v from "valibot";
 
-export const LoginRequestSchema = v.object({
+export const TokenRequestSchema = v.object({
   email: v.string(),
   password: v.string(),
   phone: v.nullish(v.string()),
@@ -20,4 +20,4 @@ export const LoginRequestSchema = v.object({
   code_verifier: v.nullish(v.string()),
 });
 
-export type LoginRequest = v.Input<typeof LoginRequestSchema>;
+export type LoginRequest = v.Input<typeof TokenRequestSchema>;
