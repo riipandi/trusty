@@ -1,16 +1,16 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { csrf } from "hono/csrf";
-import { etag } from "hono/etag";
 import { getRuntimeKey } from "hono/adapter";
+import { csrf } from "hono/csrf";
 import { showRoutes } from "hono/dev";
+import { etag } from "hono/etag";
 
 import { logger } from "@/http/middleware/logger";
 import { onErrorResponse, throwResponse } from "@/http/response";
 
+import env from "@/config";
 import apiRoutes from "@/routes/api";
 import webRoutes from "@/routes/web";
-import env from "@/config";
 
 const app = new Hono();
 

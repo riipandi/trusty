@@ -3,9 +3,9 @@ import { Context } from "hono";
 import * as Jwt from "hono/jwt";
 import { typeid } from "typeid-js";
 
+import { AppConfig } from "@/config";
 import { jsonResponse, throwResponse } from "@/http/response";
 import type { LoginRequest } from "@/http/validator/auth";
-import { AppConfig } from "@/config";
 
 export type JwtPayload = {
   sub: string;

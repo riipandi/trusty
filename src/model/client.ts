@@ -1,5 +1,5 @@
-import { type Config as LibSQLConfig, Client as LibSQLClient, createClient } from "@libsql/client";
-import { type LibsqlDialectConfig, LibsqlDialect } from "@libsql/kysely-libsql";
+import { Client as LibSQLClient, type Config as LibSQLConfig, createClient } from "@libsql/client";
+import { LibsqlDialect, type LibsqlDialectConfig } from "@libsql/kysely-libsql";
 import { ColumnType, Kysely } from "kysely";
 
 import { PasswordTable } from "@/model/schema/password";
