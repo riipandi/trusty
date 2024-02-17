@@ -19,7 +19,8 @@ ENV HUSKY 0
 # -----------------------------------------------------------------------------
 FROM base AS builder
 COPY --chown=node:node . .
-RUN --mount=type=cache,id=cache-pnpm,target=/pnpm/store pnpm install && pnpm build
+RUN --mount=type=cache,id=cache-pnpm,target=/pnpm/store pnpm install
+RUN --mount=type=cache,id=cache-pnpm,target=/pnpm/store NODE_ENV=production pnpm build
 
 # -----------------------------------------------------------------------------
 # Build the application
@@ -30,6 +31,7 @@ WORKDIR /srv
 COPY --from=builder /srv/package.json ./package.json
 COPY --from=builder /srv/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /srv/.npmrc ./.npmrc
+COPY --from=builder /srv/public ./public
 COPY --from=builder /srv/dist ./dist
 
 # Install production dependencies
@@ -73,4 +75,4 @@ ENV PORT 3080
 EXPOSE 3080
 
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/usr/local/bin/node", "dist/server.cjs"]
+CMD ["/usr/local/bin/node", "dist/server.mjs"]

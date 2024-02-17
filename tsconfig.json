@@ -15,6 +15,7 @@
         "target": "ES2021",
         "allowJs": true,
         "forceConsistentCasingInFileNames": true,
+        "declaration": true, // Output build ESM
 
         "noEmit": true,
         "sourceMap": true,

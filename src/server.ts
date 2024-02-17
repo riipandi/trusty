@@ -1,16 +1,17 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { getPath } from "hono/utils/url";
 import { getRuntimeKey } from "hono/adapter";
 import { csrf } from "hono/csrf";
 import { showRoutes } from "hono/dev";
 import { etag } from "hono/etag";
+import { serveStatic } from "@hono/node-server/serve-static";
 
 import { logger } from "@/http/middleware/logger";
 import { onErrorResponse, throwResponse } from "@/http/response";
-
-import env from "@/config";
 import apiRoutes from "@/routes/api";
 import webRoutes from "@/routes/web";
+import env from "@/config";
 
 const app = new Hono();
 
@@ -22,13 +23,23 @@ app.use("*", csrf({ origin: "*" }));
 // Error handling
 app.notFound((c) => {
   // Check if it's an API request
-  if (c.req.url.includes("/api")) {
+  const path = getPath(c.req.raw);
+  if (path.startsWith("/api")) {
     return throwResponse(c, 404, "Resource not found");
   }
   return c.html("Not found", 404);
 });
 
 app.onError(onErrorResponse);
+
+// Serve static files
+app.use(
+  "/assets/*",
+  serveStatic({
+    root: "./",
+    rewriteRequestPath: (path) => path.replace(/^\/assets/, "/public"),
+  }),
+);
 
 // Register application routes
 app.get("/", (c) => c.redirect("/ui", 302));

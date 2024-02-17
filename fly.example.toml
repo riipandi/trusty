@@ -18,7 +18,7 @@ console_command = "/bin/sh"
 
 [deploy]
   strategy = "immediate"
-  # release_command = "/usr/local/bin/node dist/migrate.cjs migrate"
+  # release_command = "/usr/local/bin/node dist/migrate.mjs migrate"
 
 [env]
   BIND_ADDR = "0.0.0.0:3080"

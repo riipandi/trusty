@@ -20,10 +20,7 @@ export async function login(c: Context) {
   const { email } = await c.req.json<LoginRequest>();
   const { APP_SECRET_KEY } = AppConfig(c);
 
-  console.log("AppConfig", APP_SECRET_KEY);
-
   const expiresIn = 3600;
-
   const issuer = "Trusty Auth";
   const sessionId = typeid("sess").toString();
   const tokenId = typeid("jti").toString();
