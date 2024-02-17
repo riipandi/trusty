@@ -2,8 +2,6 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
         "strict": true,
-        "jsx": "react-jsx",
-        "jsxImportSource": "hono/jsx",
 
         "lib": ["DOM", "DOM.Iterable", "ES2021"],
         "isolatedModules": true,
@@ -21,6 +19,11 @@
         "sourceMap": true,
         "skipLibCheck": true,
         "incremental": true,
+
+        // @ref: https://hono.dev/snippets/htmx
+        "jsx": "react-jsx",
+        "jsxImportSource": "hono/jsx",
+        "types": ["typed-htmx"],
 
         "outDir": "dist",
         "baseUrl": ".",

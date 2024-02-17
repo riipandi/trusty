@@ -67,6 +67,9 @@ devDependencies:
   tsx:
     specifier: ^4.7.1
     version: 4.7.1
+  typed-htmx:
+    specifier: ^0.2.1
+    version: 0.2.1
   wireit:
     specifier: ^0.14.4
     version: 0.14.4
@@ -6743,6 +6746,18 @@ packages:
     dependencies:
       media-typer: 0.3.0
       mime-types: 2.1.35
+    dev: true
+
+  /typed-html@3.0.1:
+    resolution: {integrity: sha512-JKCM9zTfPDuPqQqdGZBWSEiItShliKkBFg5c6yOR8zth43v763XkAzTWaOlVqc0Y6p9ee8AaAbipGfUnCsYZUA==}
+    engines: {node: '>=12'}
+    dev: true
+
+  /typed-htmx@0.2.1:
+    resolution: {integrity: sha512-n6d1W8raMJ0aS1e7NSmFPXu3PCPJM7/mnG71mK6t01ZKftxBkA8LuIfZ1qN3hBLphj7cxQsoCKdJhgw0LsZB1Q==}
+    engines: {node: '>=12'}
+    dependencies:
+      typed-html: 3.0.1
     dev: true
 
   /typedarray-to-buffer@3.1.5:

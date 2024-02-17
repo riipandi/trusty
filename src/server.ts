@@ -40,6 +40,8 @@ app.use(
     rewriteRequestPath: (path) => path.replace(/^\/assets/, "/public"),
   }),
 );
+app.use("/favicon.ico", serveStatic({ path: "./public/favicon.ico" }));
+app.use("/robots.txt", serveStatic({ path: "./public/robots.txt" }));
 
 // Register application routes
 app.get("/", (c) => c.redirect("/ui", 302));

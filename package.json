@@ -33,8 +33,14 @@
     "wireit": {
         "build": {
             "command": "rimraf dist && node build.config.mjs",
-            "files": ["src/**/*.{css,ts}", "tsconfig.json"],
-            "output": ["dist/**", "static/**"],
+            "files": [
+                "src/**/*.{css,ts}",
+                "tsconfig.json"
+            ],
+            "output": [
+                "dist/**",
+                "static/**"
+            ],
             "clean": "if-file-deleted",
             "env": {
                 "NODE_ENV": {
@@ -67,6 +73,7 @@
         "npm-check-updates": "^16.14.15",
         "rimraf": "^5.0.5",
         "tsx": "^4.7.1",
+        "typed-htmx": "^0.2.1",
         "wireit": "^0.14.4"
     },
     "engines": {
