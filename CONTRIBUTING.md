@@ -67,6 +67,17 @@ echo $GH_TOKEN | docker login ghcr.io --username CHANGEME --password-stdin
 docker run --rm -it --name trusty --env-file .env -p 3080:3080 ghcr.io/riipandi/trusty:edge
 ```
 
+### Get Database Size
+
+```sql
+SELECT
+    page_count * page_size AS "Size (bytes)",
+    page_count * page_size / 1024 AS "Size (KB)",
+    page_count * page_size / (1024 * 1024) AS "Size (MB)"
+FROM pragma_page_count(),
+     pragma_page_size();
+```
+
 ### Simple Load Testing
 
 Using [`hey`](https://github.com/rakyll/hey) to perform a load testing:

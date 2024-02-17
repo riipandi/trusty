@@ -1,4 +1,5 @@
 import { Argon2id } from "oslo/password";
+import { faker } from "@faker-js/faker";
 import { typeid } from "typeid-js";
 
 import { type KyselyDatabase } from "@/model/client";
@@ -6,7 +7,7 @@ import { InsertUser } from "@/model/schema/user";
 
 export async function userSeeder(db: KyselyDatabase) {
   try {
-    const usersWithPasswords: { user: InsertUser; password: string }[] = [
+    const defaultUsers: { user: InsertUser; password: string }[] = [
       {
         user: {
           // id: typeid("user").toString(),
@@ -106,6 +107,22 @@ export async function userSeeder(db: KyselyDatabase) {
         password: "johnPassword",
       },
     ];
+
+    // Generate fake users with passwords
+    const fakeUsers: { user: InsertUser; password: string }[] = [];
+    for (let i = 0; i < 100; i++) {
+      fakeUsers.push({
+        user: {
+          email: faker.internet.email().toLocaleLowerCase(),
+          aud: "authenticated",
+          role: "authenticated",
+          is_super_admin: false,
+        },
+        password: faker.internet.password(),
+      });
+    }
+
+    const usersWithPasswords = [...defaultUsers, ...fakeUsers];
 
     await db.transaction().execute(async (trx) => {
       const passwordHasher = new Argon2id();

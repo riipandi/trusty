@@ -33,8 +33,14 @@
     "wireit": {
         "build": {
             "command": "rimraf dist && node build.config.mjs",
-            "files": ["src/**/*.{css,ts}", "tsconfig.json"],
-            "output": ["dist/**", "static/**"],
+            "files": [
+                "src/**/*.{css,ts}",
+                "tsconfig.json"
+            ],
+            "output": [
+                "dist/**",
+                "static/**"
+            ],
             "clean": "if-file-deleted",
             "env": {
                 "NODE_ENV": {
@@ -53,14 +59,15 @@
         "consola": "^3.2.3",
         "dotenv": "^16.4.4",
         "hono": "^4.0.3",
-        "kysely-plugin-serialize": "^0.5.7",
         "kysely": "^0.27.2",
+        "kysely-plugin-serialize": "^0.5.7",
         "oslo": "^1.1.1",
         "typeid-js": "^0.5.0",
         "valibot": "^0.28.1"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.5.3",
+        "@faker-js/faker": "^8.4.1",
         "@types/node": "^20.11.19",
         "esbuild": "^0.20.0",
         "husky": "^9.0.11",
