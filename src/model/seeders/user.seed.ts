@@ -1,5 +1,5 @@
-import { Argon2id } from "oslo/password";
 import { faker } from "@faker-js/faker";
+import { Argon2id } from "oslo/password";
 import { typeid } from "typeid-js";
 
 import { type KyselyDatabase } from "@/model/client";
