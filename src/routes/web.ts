@@ -1,11 +1,11 @@
-import { GlobalEnv } from "@/global";
-import { Hono } from "hono";
-import { html, raw } from "hono/html";
+import { Hono } from 'hono/mod.ts';
+import { html, raw } from 'hono/helper/html/index.ts';
+import { GlobalEnv } from '@/global.d.ts';
 
 const route = new Hono<GlobalEnv>();
 
-route.get("/", (c) => {
-  const message = "This is will be replaced wit the UI!";
+route.get('/', (c) => {
+  const message = 'This is will be replaced wit the UI!';
   return c.html(html`<html>
   <head>
     <meta charset="UTF-8">

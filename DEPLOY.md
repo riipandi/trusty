@@ -12,8 +12,8 @@ fly logs
 
 ### Setup custom domain
 
-Point DNS A Record to the assigned IP address. Or, if using
-subdomain you can point `trusty-demo.fly.dev` CNAME record.
+Point DNS A Record to the assigned IP address. Or, if using subdomain you can
+point `trusty-demo.fly.dev` CNAME record.
 
 ```sh
 # Allocate IPs and setup custom domain (optional)

@@ -1,9 +1,9 @@
 {
-    "version": "1",
-    "name": "Trusty Auth v1",
-    "type": "collection",
-    "presets": {
-        "requestType": "http",
-        "requestUrl": "http://localhost:3080"
-    }
+  "version": "1",
+  "name": "Trusty Auth v1",
+  "type": "collection",
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "http://localhost:3080"
+  }
 }

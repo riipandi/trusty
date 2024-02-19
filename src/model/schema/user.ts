@@ -1,7 +1,7 @@
-import { WithSoftDeleteTimeStamp, WithTimeStampSchema } from "@/model/client";
-import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
+import { ColumnType, Generated, Insertable, Selectable, Updateable } from 'npm:kysely';
+import { WithSoftDeleteTimeStamp, WithTimeStampSchema } from '@/model/client.ts';
 
-export const TABLE_NAME = "users";
+export const TABLE_NAME = 'users';
 
 export interface UserTable extends WithTimeStampSchema, WithSoftDeleteTimeStamp {
   id: Generated<string>;

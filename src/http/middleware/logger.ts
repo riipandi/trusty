@@ -1,14 +1,14 @@
-import type { MiddlewareHandler } from "hono/types";
-import { getPath } from "hono/utils/url";
+import type { MiddlewareHandler } from 'hono/types.ts';
+import { getPath } from 'hono/utils/url.ts';
 
 enum LogPrefix {
-  Incoming = "[REQ]",
-  Outgoing = "[RES]",
-  Error = "[ERR]",
+  Incoming = '[REQ]',
+  Outgoing = '[RES]',
+  Error = '[ERR]',
 }
 
 const humanize = (times: string[]) => {
-  const [delimiter, separator] = [",", "."];
+  const [delimiter, separator] = [',', '.'];
   const find = /(\d)(?=(\d\d\d)+(?!\d))/g;
   const orderTimes = times.map((v) => v.replace(find, `$1 ${delimiter}`));
   return orderTimes.join(separator);
@@ -62,11 +62,10 @@ function log(
 ) {
   const timestamp = new Date().toISOString();
   const defaultLogger = `${prefix} ${timestamp} ${colorMethod(method)} ${clientAddr} ${path}`;
-  const uAgent = userAgent ?? "";
-  const out =
-    prefix === LogPrefix.Incoming
-      ? `${defaultLogger} ${uAgent}`
-      : `${defaultLogger} ${colorStatus(status)} ${elapsed}`;
+  const uAgent = userAgent ?? '';
+  const out = prefix === LogPrefix.Incoming
+    ? `${defaultLogger} ${uAgent}`
+    : `${defaultLogger} ${colorStatus(status)} ${elapsed}`;
   fn(out);
 }
 
@@ -75,7 +74,7 @@ export const logger = (fn: PrintFunc = console.log): MiddlewareHandler => {
     const { method } = c.req;
 
     const clientAddr = c.env.incoming.socket.remoteAddress;
-    const userAgent = c.req.header("User-Agent");
+    const userAgent = c.req.header('User-Agent');
     const path = getPath(c.req.raw);
 
     log(fn, LogPrefix.Incoming, method, path, clientAddr, userAgent);
@@ -84,6 +83,15 @@ export const logger = (fn: PrintFunc = console.log): MiddlewareHandler => {
 
     await next();
 
-    log(fn, LogPrefix.Outgoing, method, path, clientAddr, userAgent, c.res.status, time(start));
+    log(
+      fn,
+      LogPrefix.Outgoing,
+      method,
+      path,
+      clientAddr,
+      userAgent,
+      c.res.status,
+      time(start),
+    );
   };
 };

@@ -1,6 +1,6 @@
-import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
+import { ColumnType, Generated, Insertable, Selectable, Updateable } from 'npm:kysely';
 
-export const TABLE_NAME = "mfa_challenges";
+export const TABLE_NAME = 'mfa_challenges';
 
 export interface MfaChallengeTable {
   id: Generated<string>;

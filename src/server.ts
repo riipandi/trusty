@@ -1,29 +1,27 @@
-import { serve } from "@hono/node-server";
-import { serveStatic } from "@hono/node-server/serve-static";
-import { Hono } from "hono";
-import { getRuntimeKey } from "hono/adapter";
-import { csrf } from "hono/csrf";
-import { etag } from "hono/etag";
-import { getPath } from "hono/utils/url";
+#!/usr/bin/env -S deno run -A --watch=srv/,public/
+// Copyright 2024 Aris Ripandi. Apache-2.0 license.
 
-import env from "@/config";
-import { GlobalEnv } from "@/global";
-import { logger } from "@/http/middleware/logger";
-import { onErrorResponse, throwResponse } from "@/http/response";
-import { db } from "@/model/client";
-import apiRoutes from "@/routes/api";
-import webRoutes from "@/routes/web";
+import { Hono } from 'hono/mod.ts';
+import { csrf, etag, serveStatic } from 'hono/middleware.ts';
+import { getPath } from 'hono/utils/url.ts';
+
+import { GlobalEnv } from '@/global.d.ts';
+import { logger } from '@/http/middleware/logger.ts';
+import { onErrorResponse, throwResponse } from '@/http/response.ts';
+import { db } from '@/model/client.ts';
+import apiRoutes from '@/routes/api.ts';
+import webRoutes from '@/routes/web.ts';
 
 const app = new Hono<GlobalEnv>();
 
 // Global middlewares
-app.use("*", logger());
-app.use("*", etag());
-app.use("*", csrf({ origin: "*" }));
+app.use('*', logger());
+app.use('*', etag());
+app.use('*', csrf({ origin: '*' }));
 
 // Singleton context for database
 app.use(async (c, next) => {
-  c.set("db", db);
+  c.set('db', db);
   await next();
 });
 
@@ -31,34 +29,28 @@ app.use(async (c, next) => {
 app.notFound((c) => {
   // Check if it's an API request
   const path = getPath(c.req.raw);
-  if (path.startsWith("/api")) {
-    return throwResponse(c, 404, "No route matched with those values");
+  if (path.startsWith('/api')) {
+    return throwResponse(c, 404, 'No route matched with those values');
   }
-  return c.html("Not found", 404);
+  return c.html('Not found', 404);
 });
 
 app.onError(onErrorResponse);
 
 // Serve static files
 app.use(
-  "/assets/*",
+  '/assets/*',
   serveStatic({
-    root: "./",
-    rewriteRequestPath: (path) => path.replace(/^\/assets/, "/public"),
+    root: './',
+    rewriteRequestPath: (path) => path.replace(/^\/assets/, '/public'),
   }),
 );
-app.use("/favicon.ico", serveStatic({ path: "./public/favicon.ico" }));
-app.use("/robots.txt", serveStatic({ path: "./public/robots.txt" }));
+app.use('/favicon.ico', serveStatic({ path: './public/favicon.ico' }));
+app.use('/robots.txt', serveStatic({ path: './public/robots.txt' }));
 
 // Register application routes
-app.get("/", (c) => c.redirect("/ui", 302));
-app.route("/api", apiRoutes);
-app.route("/ui", webRoutes);
+app.get('/', (c) => c.redirect('/ui', 302));
+app.route('/api', apiRoutes);
+app.route('/ui', webRoutes);
 
-const hostname = env.HOSTNAME;
-const port = env.PORT;
-
-serve({ fetch: app.fetch, hostname, port }, (listener) => {
-  const listenAddress = `${listener.address}:${listener.port}`;
-  console.info(`Server runnin on ${getRuntimeKey()}: http://${listenAddress}`);
-});
+Deno.serve({ port: 3080, hostname: '0.0.0.0' }, app.fetch);

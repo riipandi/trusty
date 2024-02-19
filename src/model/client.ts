@@ -1,14 +1,14 @@
-import { Client as LibSQLClient, createClient } from "@libsql/client";
-import { LibsqlDialect } from "@libsql/kysely-libsql";
-import { ColumnType, Kysely } from "kysely";
-import { ParseJSONResultsPlugin } from "kysely";
-import { SerializePlugin } from "kysely-plugin-serialize";
+// import { Database as SQLiteDatabase } from 'sqlite3/mod.ts';
+import { Client as LibSQLClient, createClient } from 'npm:@libsql/client';
+import { LibsqlDialect } from 'npm:@libsql/kysely-libsql';
+import { ColumnType, Kysely } from 'npm:kysely';
+import { SerializePlugin } from 'npm:kysely-plugin-serialize';
 
-import { PasswordTable } from "@/model/schema/password";
-import { SessionTable } from "@/model/schema/session";
-import { UserTable } from "@/model/schema/user";
+import { PasswordTable } from '@/model/schema/password.ts';
+import { SessionTable } from '@/model/schema/session.ts';
+import { UserTable } from '@/model/schema/user.ts';
 
-import env from "@/config";
+import env from '@/config.ts';
 
 /**
  * For Kysely's type-safety and autocompletion to work, it needs to know
@@ -44,7 +44,7 @@ export const sqlClient: LibSQLClient = createClient({ ...DBClientConfig });
 
 export const db: Kysely<Database> = new Kysely<Database>({
   dialect: new LibsqlDialect(DBClientConfig),
-  log: env.NODE_ENV === "development" ? ["error", "query"] : ["error"],
+  log: env.NODE_ENV === 'development' ? ['error', 'query'] : ['error'],
   plugins: [
     new SerializePlugin(), // This plugin should be placed at the end of plugins array
   ],

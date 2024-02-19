@@ -1,17 +1,17 @@
-import type { KyselyDatabase } from "@/model/client";
+import { sql } from 'npm:kysely';
+import type { KyselyDatabase } from '@/model/client.ts';
 import {
-  PRIMARY_KEY_COLUMN,
-  TIMESTAMPS_COLUMN,
-  TableIndexBuilder,
   createIndex,
-} from "@/model/extends";
-import { sql } from "kysely";
+  PRIMARY_KEY_COLUMN,
+  TableIndexBuilder,
+  TIMESTAMPS_COLUMN,
+} from '@/model/extends.ts';
 
-import * as tFlowState from "@/model/schema/flow_state";
-import * as tSamlProvider from "@/model/schema/saml_provider";
-import * as tSamlRelayState from "@/model/schema/saml_relay_state";
-import * as tSSODomain from "@/model/schema/sso_domain";
-import * as tSSOProvider from "@/model/schema/sso_provider";
+import * as tFlowState from '@/model/schema/flow_state.ts';
+import * as tSamlProvider from '@/model/schema/saml_provider.ts';
+import * as tSamlRelayState from '@/model/schema/saml_relay_state.ts';
+import * as tSSODomain from '@/model/schema/sso_domain.ts';
+import * as tSSOProvider from '@/model/schema/sso_provider.ts';
 
 //----------------------------------------------------------------------------
 // Query to create `flow_state` table
@@ -20,25 +20,33 @@ const FlowStateMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tFlowState.TABLE_NAME)
     .$call(PRIMARY_KEY_COLUMN)
-    .addColumn("user_id", "text", (col) => col.references("users.id").onDelete("cascade").notNull())
-    .addColumn("auth_code", "text", (col) => col.notNull())
-    .addColumn("code_challenge_method", "text", (c) => c.notNull().defaultTo("plain"))
-    .addColumn("code_challenge", "text", (col) => col.notNull())
-    .addColumn("provider_type", "text", (col) => col.notNull())
-    .addColumn("provider_access_token", "text")
-    .addColumn("provider_refresh_token", "text")
-    .addColumn("authentication_method", "text", (col) => col.notNull())
+    .addColumn('user_id', 'text', (col) => col.references('users.id').onDelete('cascade').notNull())
+    .addColumn('auth_code', 'text', (col) => col.notNull())
+    .addColumn('code_challenge_method', 'text', (c) => c.notNull().defaultTo('plain'))
+    .addColumn('code_challenge', 'text', (col) => col.notNull())
+    .addColumn('provider_type', 'text', (col) => col.notNull())
+    .addColumn('provider_access_token', 'text')
+    .addColumn('provider_refresh_token', 'text')
+    .addColumn('authentication_method', 'text', (col) => col.notNull())
     .$call(TIMESTAMPS_COLUMN)
     .addCheckConstraint(
-      "flow_state_code_challenge_method_check",
+      'flow_state_code_challenge_method_check',
       sql`code_challenge_method IN ('s256','plain')`,
     )
     .ifNotExists();
 
 const FlowStateTableIndexes: TableIndexBuilder[] = [
-  { kind: "normal", name: "flow_state_created_at_idx", column: "created_at DESC" },
-  { kind: "normal", name: "idx_auth_code", column: "auth_code" },
-  { kind: "normal", name: "idx_user_id_auth_method", column: "user_id, authentication_method" },
+  {
+    kind: 'normal',
+    name: 'flow_state_created_at_idx',
+    column: 'created_at DESC',
+  },
+  { kind: 'normal', name: 'idx_auth_code', column: 'auth_code' },
+  {
+    kind: 'normal',
+    name: 'idx_user_id_auth_method',
+    column: 'user_id, authentication_method',
+  },
 ];
 
 //----------------------------------------------------------------------------
@@ -48,14 +56,19 @@ const SSOProviderMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tSSOProvider.TABLE_NAME)
     .$call(PRIMARY_KEY_COLUMN)
-    .addColumn("resource_id", "text", (col) =>
-      col.modifyEnd(sql`CHECK (resource_id IS NULL OR length(resource_id) > 0)`),
-    )
+    .addColumn('resource_id', 'text', (col) =>
+      col.modifyEnd(
+        sql`CHECK (resource_id IS NULL OR length(resource_id) > 0)`,
+      ))
     .$call(TIMESTAMPS_COLUMN)
     .ifNotExists();
 
 const SSOProviderTableIndexes: TableIndexBuilder[] = [
-  { kind: "unique", name: "sso_providers_resource_id_idx", column: "resource_id" },
+  {
+    kind: 'unique',
+    name: 'sso_providers_resource_id_idx',
+    column: 'resource_id',
+  },
 ];
 
 //----------------------------------------------------------------------------
@@ -65,17 +78,24 @@ const SSODomainMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tSSODomain.TABLE_NAME)
     .$call(PRIMARY_KEY_COLUMN)
-    .addColumn("sso_provider_id", "text", (col) =>
-      col.references("sso_providers.id").onDelete("cascade").notNull(),
-    )
-    .addColumn("domain", "text", (col) => col.notNull())
+    .addColumn('sso_provider_id', 'text', (col) =>
+      col.references('sso_providers.id').onDelete('cascade').notNull())
+    .addColumn('domain', 'text', (col) =>
+      col.notNull())
     .$call(TIMESTAMPS_COLUMN)
-    .addCheckConstraint("sso_domains_domain_length_check", sql`(length(domain) > 0)`)
+    .addCheckConstraint(
+      'sso_domains_domain_length_check',
+      sql`(length(domain) > 0)`,
+    )
     .ifNotExists();
 
 const SSODomainTableIndexes: TableIndexBuilder[] = [
-  { kind: "unique", name: "sso_domains_domain_idx", column: "domain" },
-  { kind: "normal", name: "sso_domains_sso_provider_id_idx", column: "sso_provider_id" },
+  { kind: 'unique', name: 'sso_domains_domain_idx', column: 'domain' },
+  {
+    kind: 'normal',
+    name: 'sso_domains_sso_provider_id_idx',
+    column: 'sso_provider_id',
+  },
 ];
 
 //----------------------------------------------------------------------------
@@ -85,25 +105,36 @@ const SAMLProviderMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tSamlProvider.TABLE_NAME)
     .$call(PRIMARY_KEY_COLUMN)
-    .addColumn("sso_provider_id", "text", (col) =>
-      col.references("sso_providers.id").onDelete("cascade").notNull(),
-    )
-    .addColumn("entity_id", "text", (col) => col.notNull())
-    .addColumn("metadata_xml", "text", (col) => col.notNull())
-    .addColumn("metadata_url", "text")
-    .addColumn("attribute_mapping", "jsonb")
+    .addColumn('sso_provider_id', 'text', (col) =>
+      col.references('sso_providers.id').onDelete('cascade').notNull())
+    .addColumn('entity_id', 'text', (col) =>
+      col.notNull())
+    .addColumn('metadata_xml', 'text', (col) =>
+      col.notNull())
+    .addColumn('metadata_url', 'text')
+    .addColumn('attribute_mapping', 'jsonb')
     .$call(TIMESTAMPS_COLUMN)
-    .addCheckConstraint("saml_providers_entity_id_length_check", sql`(length(entity_id) > 0)`)
     .addCheckConstraint(
-      "saml_providers_metadata_url_length_check",
+      'saml_providers_entity_id_length_check',
+      sql`(length(entity_id) > 0)`,
+    )
+    .addCheckConstraint(
+      'saml_providers_metadata_url_length_check',
       sql`(metadata_url IS NULL OR length(metadata_url) > 0)`,
     )
-    .addCheckConstraint("saml_providers_metadata_xml_length_check", sql`(length(metadata_xml) > 0)`)
+    .addCheckConstraint(
+      'saml_providers_metadata_xml_length_check',
+      sql`(length(metadata_xml) > 0)`,
+    )
     .ifNotExists();
 
 const SAMLProviderTableIndexes: TableIndexBuilder[] = [
-  { kind: "unique", name: "saml_providers_entity_id_idx", column: "entity_id" },
-  { kind: "normal", name: "saml_providers_sso_provider_id_idx", column: "sso_provider_id" },
+  { kind: 'unique', name: 'saml_providers_entity_id_idx', column: 'entity_id' },
+  {
+    kind: 'normal',
+    name: 'saml_providers_sso_provider_id_idx',
+    column: 'sso_provider_id',
+  },
 ];
 
 //----------------------------------------------------------------------------
@@ -113,23 +144,37 @@ const SAMLRelayStateMigrationQuery = (db: KyselyDatabase) =>
   db.schema
     .createTable(tSamlRelayState.TABLE_NAME)
     .$call(PRIMARY_KEY_COLUMN)
-    .addColumn("sso_provider_id", "text", (col) =>
-      col.references("sso_providers.id").onDelete("cascade").notNull(),
-    )
-    .addColumn("flow_state_id", "text", (col) =>
-      col.references("flow_state.id").onDelete("cascade").notNull(),
-    )
-    .addColumn("request_id", "text", (col) => col.notNull())
-    .addColumn("for_email", "text")
-    .addColumn("redirect_to", "text")
+    .addColumn('sso_provider_id', 'text', (col) =>
+      col.references('sso_providers.id').onDelete('cascade').notNull())
+    .addColumn('flow_state_id', 'text', (col) =>
+      col.references('flow_state.id').onDelete('cascade').notNull())
+    .addColumn('request_id', 'text', (col) =>
+      col.notNull())
+    .addColumn('for_email', 'text')
+    .addColumn('redirect_to', 'text')
     .$call(TIMESTAMPS_COLUMN)
-    .addCheckConstraint("saml_relay_states_request_id_length_check", sql`(length(request_id) > 0)`)
+    .addCheckConstraint(
+      'saml_relay_states_request_id_length_check',
+      sql`(length(request_id) > 0)`,
+    )
     .ifNotExists();
 
 const SAMLRelayStateTableIndexes: TableIndexBuilder[] = [
-  { kind: "normal", name: "saml_relay_states_created_at_idx", column: "created_at DESC" },
-  { kind: "normal", name: "saml_relay_states_for_email_idx", column: "for_email" },
-  { kind: "normal", name: "saml_relay_states_sso_provider_id_idx", column: "sso_provider_id" },
+  {
+    kind: 'normal',
+    name: 'saml_relay_states_created_at_idx',
+    column: 'created_at DESC',
+  },
+  {
+    kind: 'normal',
+    name: 'saml_relay_states_for_email_idx',
+    column: 'for_email',
+  },
+  {
+    kind: 'normal',
+    name: 'saml_relay_states_sso_provider_id_idx',
+    column: 'sso_provider_id',
+  },
 ];
 
 export async function up(db: KyselyDatabase): Promise<void> {

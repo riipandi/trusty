@@ -1,8 +1,8 @@
-import { jsonResponse } from "@/http/response";
-import { vValidator } from "@hono/valibot-validator";
+import { vValidator } from 'npm:@hono/valibot-validator';
+import { jsonResponse } from '@/http/response.ts';
 
 export function validateJsonRequest(schema: any) {
-  return vValidator("json", schema, (result, c) => {
+  return vValidator('json', schema, (result, c) => {
     if (!result.success) {
       const issues = result.issues.map(({ path, expected, input }) => {
         return {
@@ -10,7 +10,7 @@ export function validateJsonRequest(schema: any) {
           message: `Expected ${expected}, but got ${typeof input}`,
         };
       });
-      return jsonResponse(c, "Invalid request", { issues }, 400);
+      return jsonResponse(c, 'Invalid request', { issues }, 400);
     }
   });
 }

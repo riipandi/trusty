@@ -1,6 +1,6 @@
-import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
+import { ColumnType, Generated, Insertable, Selectable, Updateable } from 'npm:kysely';
 
-export const TABLE_NAME = "audit_log";
+export const TABLE_NAME = 'audit_log';
 
 export interface AuditLogTable {
   id: Generated<string>;

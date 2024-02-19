@@ -21,6 +21,9 @@ lib-cov
 *.db
 *.pem
 logs/
+cov/
+cov.lcov
+html_cov/
 
 # IDE settings
 .idea/

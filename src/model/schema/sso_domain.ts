@@ -1,7 +1,7 @@
-import { WithTimeStampSchema } from "@/model/client";
-import { Generated, Insertable, Selectable, Updateable } from "kysely";
+import { Generated, Insertable, Selectable, Updateable } from 'npm:kysely';
+import { WithTimeStampSchema } from '@/model/client.ts';
 
-export const TABLE_NAME = "sso_domains";
+export const TABLE_NAME = 'sso_domains';
 
 export interface SSODomainTable extends WithTimeStampSchema {
   id: Generated<string>;

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+  "lock": false,
+  "tasks": {
+    "start": "deno run -A src/server.ts",
+    "dev": "deno run -A --watch=src/,public/ --env src/server.ts",
+    "db:migrate": "deno run -A --env src/migrate.ts",
+    "db:rollback": "deno run -A --env src/migrate.ts rollback",
+    "db:seed": "deno run -A --env src/migrate.ts seed",
+    "db:generate": "deno run -A --env src/migrate.ts generate",
+    "docs:dev": "(cd docs && deno run -A npm:mintlify dev)",
+    "docs:check": "(cd docs && deno run -A npm:mintlify broken-links)",
+    "docker:build": "docker build -f Dockerfile . -t ghcr.io/riipandi/trusty:edge",
+    "docker:run": "docker run --rm -it -p 3080:3080 --env-file .env --name trusty ghcr.io/riipandi/trusty:edge",
+    "docker:push": "docker push ghcr.io/riipandi/trusty:edge",
+    "generate-key": "openssl rand -base64 500 | tr -dc 'a-zA-Z0-9' | fold -w 40 | head -n 1",
+    "prune": "docker compose down --remove-orphans --volumes",
+    "clean": "docker compose down --remove-orphans",
+    "pre-dev": "docker compose up -d",
+    "test": "deno test -A --parallel --trace-ops"
+  },
+  "imports": {
+    "@/": "./src/",
+    "std/": "https://deno.land/std@0.216.0/",
+    "hono": "https://deno.land/x/hono@v4.0.4/mod.ts",
+    "hono/": "https://deno.land/x/hono@v4.0.4/",
+    "sqlite3": "https://deno.land/x/sqlite3@0.10.0/mod.ts",
+    "kysely": "npm:/kysely@0.27.2",
+    "valibot": "https://deno.land/x/valibot@v0.28.1/mod.ts",
+    "@hono/valibot-validator": "npm:/@hono/valibot-validator0.2.2",
+    "@libsql/client": "npm:/@libsql/client@0.5.0",
+    "@libsql/kysely-libsql": "npm:/@libsql/kysely-libsql@0.3.0",
+    "kysely-plugin-serialize": "npm:/kysely-plugin-serialize@0.5.7",
+    "arctic": "npm:/arctic@1.1.6",
+    "oslo": "npm:/oslo@1.1.1",
+    "typeid-js": "npm:/typeid-js@0.5.0"
+  },
+  "lint": {
+    "include": ["src/"],
+    "rules": {
+      "tags": ["recommended"],
+      "exclude": ["no-window", "ban-types"]
+    }
+  },
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 100,
+    "indentWidth": 2,
+    "semiColons": true,
+    "singleQuote": true,
+    "proseWrap": "preserve",
+    "include": ["src/", "**/*.json"]
+  },
+  "compilerOptions": {},
+  "exclude": ["**/docs/*", "**/dump/*"]
+}

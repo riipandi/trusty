@@ -1,9 +1,9 @@
-import { WithTimeStampSchema } from "@/model/client";
-import { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
+import { ColumnType, Generated, Insertable, Selectable, Updateable } from 'npm:kysely';
+import { WithTimeStampSchema } from '@/model/client.ts';
 
-export const TABLE_NAME = "sessions";
+export const TABLE_NAME = 'sessions';
 
-export type AalEnum = "aal1" | "aal2" | "aal3";
+export type AalEnum = 'aal1' | 'aal2' | 'aal3';
 
 export interface SessionTable extends WithTimeStampSchema {
   id: Generated<string>;

@@ -1,9 +1,9 @@
-import { WithTimeStampSchema } from "@/model/client";
-import { Generated, Insertable, Selectable, Updateable } from "kysely";
+import { Generated, Insertable, Selectable, Updateable } from 'npm:kysely';
+import { WithTimeStampSchema } from '@/model/client.ts';
 
-export const TABLE_NAME = "flow_state";
+export const TABLE_NAME = 'flow_state';
 
-export type CodeChallengeMethod = "s256" | "plain";
+export type CodeChallengeMethod = 's256' | 'plain';
 
 export interface FlowStateTable extends WithTimeStampSchema {
   id: Generated<string>;

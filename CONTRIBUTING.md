@@ -9,33 +9,42 @@ give feedback.
 
 You can contribute changes to this repo by opening a pull request:
 
-1. After forking this repository to your Git account, make the proposed changes on your forked branch.
+1. After forking this repository to your Git account, make the proposed changes
+   on your forked branch.
 2. Run tests and linting locally.
 3. Commit your changes and push them to your forked repository.
 4. Navigate to the main project repository and select the _Pull Requests_ tab.
-5. Click the _New pull request_ button, then select the option "Compare across forks"
-6. Leave the base branch set to main. Set the compare branch to your forked branch, and open the pull request.
-7. Once your pull request is created, ensure that all checks have passed and that your branch has no conflicts with the base branch. If there are any issues, resolve these changes in your local repository, and then commit and push them to git.
-8. Similarly, respond to any reviewer comments or requests for changes by making edits to your local repository and pushing them to Git.
-9. Once the pull request has been reviewed, those with write access to the branch will be able to merge your changes into the project repository.
+5. Click the _New pull request_ button, then select the option "Compare across
+   forks"
+6. Leave the base branch set to main. Set the compare branch to your forked
+   branch, and open the pull request.
+7. Once your pull request is created, ensure that all checks have passed and
+   that your branch has no conflicts with the base branch. If there are any
+   issues, resolve these changes in your local repository, and then commit and
+   push them to git.
+8. Similarly, respond to any reviewer comments or requests for changes by making
+   edits to your local repository and pushing them to Git.
+9. Once the pull request has been reviewed, those with write access to the
+   branch will be able to merge your changes into the project repository.
 
-If you need more information on the steps to create a pull request, you can find a detailed walkthrough in the [Github documentation][pull-requests-docs].
-
+If you need more information on the steps to create a pull request, you can find
+a detailed walkthrough in the [Github documentation][pull-requests-docs].
 
 ## 🏁 Quick Start
 
 ### Prerequisites
 
-The following are required to run the application in development or in production environment:
+The following are required to run the application in development or in
+production environment:
 
 - [Node.js](https://nodejs.org/en/download) v20.11.0 or greater.
 - [Docker](https://docs.docker.com/engine/install), v2.10 or greater.
 
 ### Generate Secret Key
 
-Before you continue, you need to create `.env` file (you can duplicate `.env.example`) and
-fill the `application secret key` with some random string. To generate a secret key, use
-the following command:
+Before you continue, you need to create `.env` file (you can duplicate
+`.env.example`) and fill the `application secret key` with some random string.
+To generate a secret key, use the following command:
 
 ```sh
 pnpm generate-key

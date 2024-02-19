@@ -1,7 +1,7 @@
-import { WithTimeStampSchema } from "@/model/client";
-import { Generated, Insertable, Selectable, Updateable } from "kysely";
+import { Generated, Insertable, Selectable, Updateable } from 'npm:kysely';
+import { WithTimeStampSchema } from '@/model/client.ts';
 
-export const TABLE_NAME = "refresh_tokens";
+export const TABLE_NAME = 'refresh_tokens';
 
 export interface RefreshTokenTable extends WithTimeStampSchema {
   id: Generated<string>;

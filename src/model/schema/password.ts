@@ -1,7 +1,7 @@
-import { WithTimeStampSchema } from "@/model/client";
-import { Insertable, Selectable, Updateable } from "kysely";
+import { Insertable, Selectable, Updateable } from 'npm:kysely';
+import { WithTimeStampSchema } from '@/model/client.ts';
 
-export const TABLE_NAME = "passwords";
+export const TABLE_NAME = 'passwords';
 
 export interface PasswordTable extends WithTimeStampSchema {
   user_id: string | null;
