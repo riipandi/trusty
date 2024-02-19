@@ -37,6 +37,20 @@ services:
       - 'redis_data:/data'
     command: 'redis-server --save 20 1 --loglevel warning --requirepass securedb'
 
+  redis_commander:
+    image: ghcr.io/joeferner/redis-commander:latest
+    container_name: trusty_redis_commander
+    restart: unless-stopped
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_USERNAME: default
+      REDIS_PASSWORD: securedb
+    ports:
+      - '8079:8081'
+    depends_on:
+      - redis
+
 volumes:
   libsql_data:
     driver: local
